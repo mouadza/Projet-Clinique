@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1280.0" stylesheets="@../../../style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projetclinique.DashboardController">
+   <children>
+      <!-- Sidebar -->
+      <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="297.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <!-- Header Section -->
+            <VBox prefHeight="0.0" prefWidth="297.0" />
+            <AnchorPane prefHeight="79.0" prefWidth="297.0" />
+            <ImageView fitHeight="127.0" fitWidth="148.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../images/ressources/1200px-Male_Doctor_Flat_Icon_Vector.svg.png" />
+               </image>
+            </ImageView>
+            <VBox prefHeight="75.0" prefWidth="297.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="297.0" text="Docteur Page">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <!-- Sidebar Buttons -->
+            <Button fx:id="btnAccueil" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnAccueilClick" prefHeight="56.0" prefWidth="361.0" text="Accueil">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="38.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/ressources/icons8_Home_32px.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <padding>
+                  <Insets left="65.0" />
+               </padding>
+            </Button>
+            <Button fx:id="btnPatients" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnPatientsClick" prefHeight="56.0" prefWidth="361.0" text="Patients">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="38.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/ressources/Picture12.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <padding>
+                  <Insets left="65.0" />
+               </padding>
+            </Button>
+            <Button fx:id="btnActesMedic" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnActeMedicClick" prefHeight="56.0" prefWidth="361.0" text="Actes médicaux">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="33.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/ressources/icons8_Xbox_Menu_32px.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <padding>
+                  <Insets left="68.0" />
+               </padding>
+            </Button>
+            <Button fx:id="btnUser" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnUserClick" prefHeight="56.0" prefWidth="361.0" text=" Utilisateurs">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="33.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/ressources/icons8_Person_32px.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <padding>
+                  <Insets left="68.0" />
+               </padding>
+            </Button>
+            <Button fx:id="btnConfig" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnConfigClick" prefHeight="56.0" prefWidth="361.0" text="Configuration">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="33.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/ressources/config.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <padding>
+                  <Insets left="68.0" />
+               </padding>
+            </Button>
+            <Button fx:id="btnClose" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onLogoutButtonClick" prefHeight="56.0" prefWidth="297.0" text="Se déconnecter">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/ressources/logout.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <padding>
+                  <Insets left="67.0" />
+               </padding>
+            </Button>
+         </children>
+         <styleClass>
+            <String fx:value="sidebar" />
+            <String fx:value="sidebar" />
+         </styleClass>
+      </VBox>
+
+      <!-- Main Content -->
+      <AnchorPane layoutX="299.3333333333333" layoutY="-2.0" prefHeight="680.0" prefWidth="981.0" style="-fx-background-color: #FFFFFF;" AnchorPane.leftAnchor="299.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-2.0">
+         <children>
+            <!-- Title and Statistics -->
+            <VBox alignment="TOP_CENTER" spacing="20.0">
+
+               <!-- HBox for horizontal layout of the sections -->
+               <VBox alignment="CENTER" spacing="20.0" />
+            </VBox>
+            <VBox alignment="CENTER" layoutX="501.0" layoutY="61.0" prefHeight="131.0" prefWidth="227.0" style="-fx-background-color: #F4F4F8; -fx-border-color: #D2D2D6; -fx-border-width: 1; -fx-border-radius: 10; -fx-background-radius: 10;">
+               <children>
+                  <Label style="-fx-font-size: 18px;" text="Rendez-vous Aujourd'hui" />
+                  <Label fx:id="lblRendezVousAujourdHui" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #FF5722;" text="0" />
+               </children>
+            </VBox>
+            <!-- Active Patients Section -->
+            <VBox alignment="CENTER" layoutX="158.0" layoutY="58.0" prefHeight="137.0" prefWidth="218.0" style="-fx-background-color: #F4F4F8; -fx-border-color: #D2D2D6; -fx-border-width: 1; -fx-border-radius: 10; -fx-background-radius: 10;">
+               <Label style="-fx-font-size: 18px;" text="Patients Actifs" />
+               <Label fx:id="lblPatientsActifs" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #4CAF50;" text="0" />
+            </VBox>
+            <!-- Title -->
+            <Label layoutX="66.0" layoutY="14.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Tableau de Bord" />
+            <TableView fx:id="tableRendezVous" layoutX="95.0" layoutY="258.0" prefHeight="397.0" prefWidth="776.0" style="-fx-background-color: #f4f4f4; -fx-border-color: #c0c0c0; -fx-border-radius: 8; -fx-background-radius: 8;">
+               <columns>
+                  <TableColumn fx:id="colNomPatient" prefWidth="226.6666" style="-fx-alignment: CENTER-LEFT; -fx-font-weight: bold; -fx-font-size: 14; -fx-text-fill: #2c3e50;" text="Nom Patient" />
+                  <TableColumn fx:id="colHeure" prefWidth="215.3333" style="-fx-alignment: CENTER; -fx-font-size: 14; -fx-text-fill: #34495e;" text="Heure" />
+                  <TableColumn fx:id="colService" prefWidth="233.3333" style="-fx-alignment: CENTER-RIGHT; -fx-font-size: 14; -fx-text-fill: #16a085;" text="Service" />
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <Label layoutX="66.0" layoutY="195.0" prefHeight="47.0" prefWidth="280.0" />
+            <Label fx:id="lblCurrentDate" layoutX="66.0" layoutY="219.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="La Liste des Rendez-vous Aujourd'hui le" />
+
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

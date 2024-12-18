@@ -1,0 +1,136 @@
+/* Style the root VBox */
+.root {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0.5, 0, 5);
+    -fx-font-family: 'Arial';
+}
+
+/* Sidebar styling */
+.sidebar {
+    -fx-background-color: linear-gradient(to right, #0b247c, #476ff4);
+}
+
+/* Header Label */
+.header-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #7c7c7c;
+}
+
+/* TextFields and PasswordField */
+.text-field, .password-field {
+    -fx-pref-height: 40px;
+    -fx-pref-width: 250px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 5px;
+    -fx-padding: 0 10px;
+}
+/* Default button style */
+.button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-border-radius: 5px;
+}
+
+/* Hover style for buttons */
+.button:hover {
+    -fx-background-color: linear-gradient(to left, #0b247c, #476ff4); /* A slightly darker shade */
+    -fx-text-fill: #040607; /* Optional: change text color */
+    -fx-cursor: hand; /* Cursor changes to pointer */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0.5, 0, 0);
+}
+.button:pressed {
+    -fx-background-color: #C0B7D3;
+    -fx-translate-y: 2px; /* Slight downward shift */
+}
+#btnAjouter{
+    -fx-background-color: linear-gradient(to left, #0b247c, #476ff4);
+    -fx-text-fill: white;
+}
+#btnAjouter:hover {
+    -fx-background-color: linear-gradient(to right, #0b247c, #476ff4);
+}
+.login-button {
+    -fx-pref-width: 250px;
+    -fx-pref-height: 40px;
+    -fx-background-color: linear-gradient(to top, #454545, #9f9f9e);
+    -fx-text-fill: black;
+    -fx-border-color: #050505;
+    -fx-font-size: 16px;
+    -fx-border-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.login-button:hover {
+    -fx-background-color: linear-gradient(to top, #454545, #9f9f9e);
+    -fx-text-fill: white;
+    -fx-border-color: white;
+}
+
+/* Error Label */
+.error-label {
+    -fx-text-fill: red;
+    -fx-font-size: 12px;
+    -fx-wrap-text: true;
+    -fx-alignment: center;
+    -fx-background-color: #858484;
+}
+
+/* Login Form Styling */
+.login-form {
+    -fx-padding: 20px;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0.5, 0, 5); /* Dark gray shadow */
+    -fx-font-family: 'Arial';
+}
+/* Styling for the TableView */
+.table-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e0e0e0;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+    -fx-table-cell-border-color: transparent;
+}
+
+/* Styling for TableColumn headers */
+.table-view .column-header-background {
+    -fx-background-color: #f4f4f4;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 1px 0;
+    -fx-background-radius: 10 10 0 0;
+}
+
+.table-view .column-header {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* Styling for Table Cells */
+.table-row-cell {
+    -fx-background-color: #f9f9f9;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 1px 0;
+    -fx-text-fill: #555555;
+}
+
+.table-row-cell:filled:selected {
+    -fx-background-color: #d4edda; /* Light green for selected rows */
+    -fx-text-fill: #333333;
+}
+
+.table-row-cell:even {
+    -fx-background-color: #f4f4f4; /* Alternate row color */
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #ffffff;
+}
+
+/* Specific text alignment for columns */
+.table-view .table-column {
+    -fx-alignment: CENTER;
+}
+
