@@ -1,14 +1,11 @@
 package org.example.projetclinique;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 
 import java.sql.*;
 
@@ -37,117 +34,173 @@ public class UtilisateursController {
         HelloApplication.loadPage("config.fxml");
     }
 
-    @FXML
-    private TextField txtNom, txtPrenom, txtTele, txtCIN, txtUsername, txtPassword;
+    @FXML private TextField nomField;
+    @FXML private TextField prenomField;
+    @FXML private TextField teleField;
+    @FXML private TextField cinField;
+    @FXML private TextField usernameField;
+    @FXML private PasswordField passwordField;
+    @FXML private TableView<Secretaire> secretaireTable;
+    @FXML private TableColumn<Secretaire, String> nomColumn;
+    @FXML private TableColumn<Secretaire, String> prenomColumn;
+    @FXML private TableColumn<Secretaire, String> teleColumn;
+    @FXML private TableColumn<Secretaire, String> cinColumn;
+    @FXML private TableColumn<Secretaire, String> usernameColumn;
+
+    private ObservableList<Secretaire> secretaireList = FXCollections.observableArrayList();
 
     @FXML
-    private TableView<Secretaire> tableSecretaires;
-
-    @FXML
-    private TableColumn<Secretaire, Integer> colId;
-
-    @FXML
-    private TableColumn<Secretaire, String> nomColumn, prenomColumn, teleColumn, cinColumn, usernameColumn;
-
-    private ObservableList<Secretaire> secretaireList;
-
     public void initialize() {
-        // Initialize ObservableList
-        secretaireList = FXCollections.observableArrayList();
+        nomColumn.setCellValueFactory(cellData -> cellData.getValue().nomProperty());
+        prenomColumn.setCellValueFactory(cellData -> cellData.getValue().prenomProperty());
+        teleColumn.setCellValueFactory(cellData -> cellData.getValue().teleProperty());
+        cinColumn.setCellValueFactory(cellData -> cellData.getValue().cinProperty());
+        usernameColumn.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
 
-        // Bind Table Columns to Secretaire properties
-        colId.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
-        nomColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNom()));
-        prenomColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPrenom()));
-        teleColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTele()));
-        cinColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCin()));
-        usernameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUsername()));
+        secretaireTable.setItems(secretaireList);
 
-        // Attach ObservableList to TableView
-        tableSecretaires.setItems(secretaireList);
-
-        // Load data from database
-        loadSecretaires();
+        loadDataFromDatabase();
     }
 
-    public void addSecretaire(ActionEvent event) {
-        String nom = txtNom.getText().trim();
-        String prenom = txtPrenom.getText().trim();
-        String tele = txtTele.getText().trim();
-        String cin = txtCIN.getText().trim();
-        String username = txtUsername.getText().trim();
-        String password = txtPassword.getText().trim();
 
-        if (nom.isEmpty() || prenom.isEmpty() || tele.isEmpty() || cin.isEmpty() || username.isEmpty() || password.isEmpty()) {
-            showAlert("Error", "Please fill in all fields.", Alert.AlertType.ERROR);
-            return;
-        }
-
-        try (Connection conn = DatabaseConnection.connect()) {
-            String query = "INSERT INTO Secretaire (nom, prenom, tele, cin, username, password) VALUES (?, ?, ?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, nom);
-            stmt.setString(2, prenom);
-            stmt.setString(3, tele);
-            stmt.setString(4, cin);
-            stmt.setString(5, username);
-            stmt.setString(6, password);
-            stmt.executeUpdate();
-
-            showAlert("Success", "Secretaire added successfully.", Alert.AlertType.INFORMATION);
-            loadSecretaires();
-        } catch (SQLException e) {
-            showAlert("Error", "Could not add secretaire: " + e.getMessage(), Alert.AlertType.ERROR);
-        }
-    }
-
-    public void deleteSecretaire(ActionEvent event) {
-        Secretaire selected = tableSecretaires.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            showAlert("Error", "Please select a secretaire to delete.", Alert.AlertType.ERROR);
-            return;
-        }
-
-        try (Connection conn = DatabaseConnection.connect()) {
-            String query = "DELETE FROM Secretaire WHERE id = ?";
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setInt(1, selected.getId());
-            stmt.executeUpdate();
-
-            showAlert("Success", "Secretaire deleted successfully.", Alert.AlertType.INFORMATION);
-            loadSecretaires();
-        } catch (SQLException e) {
-            showAlert("Error", "Could not delete secretaire: " + e.getMessage(), Alert.AlertType.ERROR);
-        }
-    }
-
-    private void loadSecretaires() {
-        secretaireList.clear();
-
-        try (Connection conn = DatabaseConnection.connect()) {
-            String query = "SELECT * FROM Secretaire";
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-
-            while (rs.next()) {
-                secretaireList.add(new Secretaire(
-                        rs.getInt("id"),
+    private void loadDataFromDatabase() {
+        String query = "SELECT * FROM secretaire";
+        ResultSet rs = DatabaseConnection.executeQuery(query);
+        try {
+            while (rs != null && rs.next()) {
+                Secretaire secretaire = new Secretaire(
                         rs.getString("nom"),
                         rs.getString("prenom"),
                         rs.getString("tele"),
-                        rs.getString("cin"),
+                        rs.getString("CIN"),
                         rs.getString("username"),
                         rs.getString("password")
-                ));
+                );
+                secretaireList.add(secretaire);
             }
         } catch (SQLException e) {
-            showAlert("Error", "Could not load secretaires: " + e.getMessage(), Alert.AlertType.ERROR);
+            e.printStackTrace();
         }
     }
 
-    private void showAlert(String title, String message, Alert.AlertType alertType) {
-        Alert alert = new Alert(alertType);
+    @FXML
+    public void addSecretaire() {
+        String nom = nomField.getText();
+        String prenom = prenomField.getText();
+        String tele = teleField.getText();
+        String cin = cinField.getText();
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+
+        // Check if any input field is empty
+        if (nom.isEmpty() || prenom.isEmpty() || tele.isEmpty() || cin.isEmpty() || username.isEmpty() || password.isEmpty()) {
+            showAlert("Erreur", "Tous les champs doivent être remplis.");
+            return;  // Stop further execution if validation fails
+        }
+
+        // SQL query using prepared statements
+        String query = "INSERT INTO secretaire (nom, prenom, tele, CIN, username, password) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = DatabaseConnection.connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            // Set the values for the query parameters
+            preparedStatement.setString(1, nom);
+            preparedStatement.setString(2, prenom);
+            preparedStatement.setString(3, tele);
+            preparedStatement.setString(4, cin);
+            preparedStatement.setString(5, username);
+            preparedStatement.setString(6, password);  // Store password as plain text
+
+            // Execute the update and check the number of affected rows
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                Secretaire newSecretaire = new Secretaire(nom, prenom, tele, cin, username, password);
+                secretaireList.add(newSecretaire);
+                clearForm();
+                showAlert("Succès", "Le secrétaire a été ajouté avec succès.");
+            } else {
+                showAlert("Erreur", "Une erreur s'est produite lors de l'ajout.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Une erreur s'est produite lors de l'ajout à la base de données.");
+        }
+    }
+
+
+
+    @FXML
+    private void deleteSecretaire() {
+        // Get the selected Secretaire
+        Secretaire selectedSecretaire = secretaireTable.getSelectionModel().getSelectedItem();
+
+        // Check if a Secretaire is selected
+        if (selectedSecretaire == null) {
+            showErrorAlert("Veuillez sélectionner un secrétaire à supprimer.");
+            return;
+        }
+
+        // Show confirmation alert
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Confirmation de suppression");
+        confirmationAlert.setHeaderText(null);
+        confirmationAlert.setContentText("Êtes-vous sûr de vouloir supprimer le secrétaire : "
+                + selectedSecretaire.getPrenom() + " " + selectedSecretaire.getNom() + " ?");
+
+        confirmationAlert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                // Proceed with the deletion from the database
+                deleteSecretaireFromDatabase(selectedSecretaire.getCin());
+            }
+        });
+    }
+
+    private void deleteSecretaireFromDatabase(String cin) {
+        // Use the correct parameter (cin) in the query
+        String query = "DELETE FROM secretaire WHERE CIN = ?";  // Use CIN as the identifier
+        try (Connection connection = DatabaseConnection.connect();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, cin);  // Set the CIN value in the query
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            // Check if the deletion was successful
+            if (rowsAffected > 0) {
+                // Remove the Secretaire from the table list (UI update)
+                secretaireList.removeIf(secretaire -> secretaire.getCin().equals(cin));
+                showAlert("Succès", "Le secrétaire a été supprimé avec succès.");
+            } else {
+                showErrorAlert("Une erreur s'est produite lors de la suppression du secrétaire.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showErrorAlert("Une erreur s'est produite lors de la suppression à la base de données.");
+        }
+    }
+
+
+
+    private void clearForm() {
+        nomField.clear();
+        prenomField.clear();
+        teleField.clear();
+        cinField.clear();
+        usernameField.clear();
+        passwordField.clear();
+    }
+    private void showErrorAlert(String message) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setTitle("Erreur");
+        errorAlert.setHeaderText(null);
+        errorAlert.setContentText(message);
+        errorAlert.showAndWait();
+    }
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
+        alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }

@@ -1,18 +1,17 @@
 package org.example.projetclinique;
 
-import javafx.beans.property.*;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 public class Secretaire {
-    private final IntegerProperty id;
-    private final StringProperty nom;
-    private final StringProperty prenom;
-    private final StringProperty tele;
-    private final StringProperty cin;
-    private final StringProperty username;
-    private final StringProperty password;
+    private StringProperty nom;
+    private StringProperty prenom;
+    private StringProperty tele;
+    private StringProperty cin;
+    private StringProperty username;
+    private StringProperty password;
 
-    public Secretaire(int id, String nom, String prenom, String tele, String cin, String username, String password) {
-        this.id = new SimpleIntegerProperty(id);
+    public Secretaire(String nom, String prenom, String tele, String cin, String username, String password) {
         this.nom = new SimpleStringProperty(nom);
         this.prenom = new SimpleStringProperty(prenom);
         this.tele = new SimpleStringProperty(tele);
@@ -21,25 +20,52 @@ public class Secretaire {
         this.password = new SimpleStringProperty(password);
     }
 
-    public int getId() { return id.get(); }
-    public IntegerProperty idProperty() { return id; }
+    public StringProperty nomProperty() {
+        return nom;
+    }
 
-    public String getNom() { return nom.get(); }
-    public StringProperty nomProperty() { return nom; }
+    public StringProperty prenomProperty() {
+        return prenom;
+    }
 
-    public String getPrenom() { return prenom.get(); }
-    public StringProperty prenomProperty() { return prenom; }
+    public StringProperty teleProperty() {
+        return tele;
+    }
 
-    public String getTele() { return tele.get(); }
-    public StringProperty teleProperty() { return tele; }
+    public StringProperty cinProperty() {
+        return cin;
+    }
 
-    public String getCin() { return cin.get(); }
-    public StringProperty cinProperty() { return cin; }
+    public StringProperty usernameProperty() {
+        return username;
+    }
 
-    public String getUsername() { return username.get(); }
-    public StringProperty usernameProperty() { return username; }
+    public StringProperty passwordProperty() {
+        return password;
+    }
 
-    public String getPassword() { return password.get(); }
-    public StringProperty passwordProperty() { return password; }
+    // Getters
+    public String getNom() {
+        return nom.get();
+    }
+
+    public String getPrenom() {
+        return prenom.get();
+    }
+
+    public String getTele() {
+        return tele.get();
+    }
+
+    public String getCin() {
+        return cin.get();
+    }
+
+    public String getUsername() {
+        return username.get();
+    }
+
+    public String getPassword() {
+        return password.get();
+    }
 }
-

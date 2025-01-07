@@ -12,6 +12,7 @@ module org.example.projetclinique {
     requires com.almasb.fxgl.all;
     requires java.sql;
     requires mysql.connector.j;
+    requires org.apache.poi.ooxml;
 
     opens org.example.projetclinique to javafx.fxml;
     exports org.example.projetclinique;

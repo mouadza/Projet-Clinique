@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class HelloController {
+public class    HelloController {
 
     @FXML
     private TextField usernameField;
@@ -32,35 +32,50 @@ public class HelloController {
             return;
         }
 
-        // Step 3: Attempt to connect to the database
+        // Step 2: Attempt to connect to the database
         try (Connection connection = DatabaseConnection.connect()) {
             if (connection != null) {
-                // Step 4: Prepare SQL query for authentication
-                String query = "SELECT * FROM admin WHERE username = ? AND password = ?";
-                PreparedStatement statement = connection.prepareStatement(query);
-                statement.setString(1, username);
-                statement.setString(2, password);
+                // Step 3: Check for `admin` credentials
+                String adminQuery = "SELECT * FROM admin WHERE username = ? AND password = ?";
+                PreparedStatement adminStatement = connection.prepareStatement(adminQuery);
+                adminStatement.setString(1, username);
+                adminStatement.setString(2, password);
 
-                // Step 5: Execute the query and check if a result is returned
-                ResultSet resultSet = statement.executeQuery();
+                ResultSet adminResultSet = adminStatement.executeQuery();
 
-                // Step 6: Debugging - Print if any result is returned
-                if (resultSet.next()) {
+                if (adminResultSet.next()) {
                     HelloApplication.loadPage("dashboard.fxml");
-                    System.out.println("Login Successfull!!");
-                } else {
-                    System.out.println("Login failed. Invalid username or password.");
-                    errorLabel.setText("Invalid username or password.");
+                    System.out.println("Admin login successful!");
+                    return;
                 }
+
+                // Step 4: Check for `secretaire` credentials
+                String secretaireQuery = "SELECT * FROM secretaire WHERE username = ? AND password = ?";
+                PreparedStatement secretaireStatement = connection.prepareStatement(secretaireQuery);
+                secretaireStatement.setString(1, username);
+                secretaireStatement.setString(2, password);
+
+                ResultSet secretaireResultSet = secretaireStatement.executeQuery();
+
+                if (secretaireResultSet.next()) {
+                    HelloApplication.loadPage("SecretairePages/Home.fxml");
+                    System.out.println("Secretaire login successful!");
+                    return;
+                }
+
+                // Step 5: If no match found
+                errorLabel.setText("Invalid username or password.");
+                System.out.println("Login failed. Invalid username or password.");
             } else {
                 errorLabel.setText("Failed to connect to the database.");
             }
         } catch (SQLException e) {
-            // Step 7: Handle any database errors
+            // Step 6: Handle any database errors
             e.printStackTrace();
             errorLabel.setText("Error occurred while connecting to the database.");
         }
     }
+
 
 
 

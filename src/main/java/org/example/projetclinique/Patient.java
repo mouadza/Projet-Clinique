@@ -1,26 +1,53 @@
 package org.example.projetclinique;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
+import java.time.LocalDate;
+import java.time.Period;
+
 public class Patient {
+    private IntegerProperty ID;
     private String nom;
     private String prenom;
     private String dateNaissance;
     private String telephone;
     private String CIN;
     private String adresse;
-    private boolean actif;
+    private int age;
 
-    // Constructor
-    public Patient(String nom, String prenom, String dateNaissance, String telephone, String CIN, String adresse, boolean actif) {
+    public Patient( String nom, String prenom, String dateNaissance, String telephone, String CIN, String adresse) {
         this.nom = nom;
         this.prenom = prenom;
         this.dateNaissance = dateNaissance;
         this.telephone = telephone;
         this.CIN = CIN;
         this.adresse = adresse;
-        this.actif = actif;
+    }
+    public Patient(int ID, String nom, String prenom, String dateNaissance, String telephone, String CIN, String adresse) {
+        this.ID = new SimpleIntegerProperty(ID);
+        this.nom = nom;
+        this.prenom = prenom;
+        this.dateNaissance = dateNaissance;
+        this.telephone = telephone;
+        this.CIN = CIN;
+        this.adresse = adresse;
     }
 
-    // Getters and Setters
+    // Getter and Property for ID
+    public int getID() {
+        return ID.get();
+    }
+
+    public void setID(int ID) {
+        this.ID.set(ID);
+    }
+
+    public IntegerProperty IDProperty() {
+        return ID;
+    }
+
+    // Getters and Setters for other fields
     public String getNom() {
         return nom;
     }
@@ -68,13 +95,7 @@ public class Patient {
     public void setAdresse(String adresse) {
         this.adresse = adresse;
     }
-
-    // Correct Getter for `boolean actif`
-    public boolean isActif() {
-        return actif;
-    }
-
-    public void setActif(boolean actif) {
-        this.actif = actif;
+    private int calculateAge(LocalDate dateOfBirth, LocalDate currentDate) {
+        return Period.between(dateOfBirth, currentDate).getYears();
     }
 }

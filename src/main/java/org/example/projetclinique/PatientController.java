@@ -6,7 +6,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 
@@ -34,8 +42,6 @@ public class PatientController {
     public void onBtnConfigClick(ActionEvent actionEvent) {
         HelloApplication.loadPage("config.fxml");
     }
-    @FXML
-    private Label lblPatientsActifs;
 
     @FXML
     private Label lblTotal;
@@ -72,7 +78,6 @@ public class PatientController {
         colTelephone.setCellValueFactory(new PropertyValueFactory<>("telephone"));
         colCIN.setCellValueFactory(new PropertyValueFactory<>("CIN"));
         colAdresse.setCellValueFactory(new PropertyValueFactory<>("adresse"));
-        colActif.setCellValueFactory(new PropertyValueFactory<>("actif"));
 
         // Table row selection listener
         tablePatients.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -93,13 +98,6 @@ public class PatientController {
         }
 
         try (Statement statement = connection.createStatement()) {
-            // Requête pour compter les patients actifs
-            String queryPatientsActifs = "SELECT COUNT(*) AS total FROM Patient WHERE actif = TRUE";
-            ResultSet rsPatients = statement.executeQuery(queryPatientsActifs);
-            if (rsPatients.next()) {
-                lblPatientsActifs.setText(String.valueOf(rsPatients.getInt("total")));
-            }
-
             // Requête pour compter les rendez-vous du jour
             String queryRendezVous = """
                 SELECT COUNT(*) AS total
@@ -128,7 +126,7 @@ public class PatientController {
             patientList.clear();
             Connection conn = DatabaseConnection.connect();
 
-            String query = "SELECT nom, prenom, date_naissance, telephone, CIN, adresse, actif FROM Patient";
+            String query = "SELECT nom, prenom, date_naissance, telephone, CIN, adresse FROM Patient";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
@@ -139,8 +137,7 @@ public class PatientController {
                         rs.getString("date_naissance"),
                         rs.getString("telephone"),
                         rs.getString("CIN"),
-                        rs.getString("adresse"),
-                        rs.getBoolean("actif")
+                        rs.getString("adresse")
                 ));
             }
 
@@ -161,7 +158,6 @@ public class PatientController {
         tfTelephone.setText(patient.getTelephone());
         tfCIN.setText(patient.getCIN());
         tfAdresse.setText(patient.getAdresse());
-        cbActif.setSelected(patient.isActif());
     }
     @FXML
     private void onModifierButtonClick() {
@@ -184,7 +180,6 @@ public class PatientController {
             String telephone = tfTelephone.getText();
             String cin = tfCIN.getText();
             String adresse = tfAdresse.getText();
-            boolean actif = cbActif.isSelected();
 
             // Validate required fields
             if (nom.isEmpty() || prenom.isEmpty() || dateNaissance == null || cin.isEmpty()) {
@@ -195,10 +190,10 @@ public class PatientController {
             // Add or update the patient
             if (selectedPatient == null) {
                 // Add new patient
-                addPatientToDatabase(nom, prenom, dateNaissance, telephone, cin, adresse, actif);
+                addPatientToDatabase(nom, prenom, dateNaissance, telephone, cin, adresse);
             } else {
                 // Update existing patient
-                updatePatientInDatabase(selectedPatient.getCIN(), nom, prenom, dateNaissance, telephone, cin, adresse, actif);
+                updatePatientInDatabase(selectedPatient.getCIN(), nom, prenom, dateNaissance, telephone, cin, adresse);
                 selectedPatient = null; // Reset selection
                 btnAjouter.setText("Ajouter"); // Reset button text
             }
@@ -212,10 +207,10 @@ public class PatientController {
     }
 
     private void addPatientToDatabase(String nom, String prenom, String dateNaissance,
-                                      String telephone, String cin, String adresse, boolean actif) {
+                                      String telephone, String cin, String adresse) {
         try {
             Connection conn = DatabaseConnection.connect();
-            String query = "INSERT INTO Patient (nom, prenom, date_naissance, telephone, CIN, adresse, actif) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Patient (nom, prenom, date_naissance, telephone, CIN, adresse) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(query);
 
             stmt.setString(1, nom);
@@ -224,7 +219,6 @@ public class PatientController {
             stmt.setString(4, telephone);
             stmt.setString(5, cin);
             stmt.setString(6, adresse);
-            stmt.setBoolean(7, actif);
 
             stmt.executeUpdate();
             loadStatistics();
@@ -236,11 +230,11 @@ public class PatientController {
         }
     }
 
-    private void updatePatientInDatabase(String oldCIN, String nom, String prenom, String dateNaissance,
-                                         String telephone, String cin, String adresse, boolean actif) {
+    private void updatePatientInDatabase(String oldCin, String nom, String prenom, String dateNaissance,
+                                         String telephone, String cin, String adresse) {
         try {
             Connection conn = DatabaseConnection.connect();
-            String query = "UPDATE Patient SET nom=?, prenom=?, date_naissance=?, telephone=?, CIN=?, adresse=?, actif=? WHERE CIN=?";
+            String query = "UPDATE Patient SET nom=?, prenom=?, date_naissance=?, telephone=?, CIN=?, adresse=? WHERE CIN=?";
             PreparedStatement stmt = conn.prepareStatement(query);
 
             stmt.setString(1, nom);
@@ -249,8 +243,7 @@ public class PatientController {
             stmt.setString(4, telephone);
             stmt.setString(5, cin);
             stmt.setString(6, adresse);
-            stmt.setBoolean(7, actif);
-            stmt.setString(8, oldCIN);
+            stmt.setString(7, oldCin);
 
             stmt.executeUpdate();
             loadStatistics();
@@ -281,12 +274,12 @@ public class PatientController {
         });
     }
 
-    private void deletePatientFromDatabase(String cin) {
+    private void deletePatientFromDatabase(String Id) {
         try {
             Connection conn = DatabaseConnection.connect();
-            String query = "DELETE FROM Patient WHERE CIN = ?";
+            String query = "DELETE FROM Patient WHERE Id = ?";
             PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, cin);
+            stmt.setString(1, Id);
 
             stmt.executeUpdate();
             conn.close();
@@ -309,9 +302,57 @@ public class PatientController {
         tfCIN.clear();
         tfAdresse.clear();
         dpDateNaissance.setValue(null);
-        cbActif.setSelected(false);
     }
+    @FXML
+    private void exportToExcel() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Excel File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+        fileChooser.setInitialFileName("Patients.xlsx");
+        File file = fileChooser.showSaveDialog(tablePatients.getScene().getWindow());
 
+
+        if (file != null) {
+            try (Workbook workbook = new XSSFWorkbook()) {
+                Sheet sheet = workbook.createSheet("Patients");
+                Row headerRow = sheet.createRow(0);
+
+                // Add headers
+                for (int i = 0; i < tablePatients.getColumns().size(); i++) {
+                    headerRow.createCell(i).setCellValue(tablePatients.getColumns().get(i).getText());
+                }
+
+                // Add data rows
+                ObservableList<Patient> data = tablePatients.getItems();
+                for (int i = 0; i < data.size(); i++) {
+                    Row row = sheet.createRow(i + 1);
+                    Patient patient = data.get(i);
+
+                    row.createCell(0).setCellValue(patient.getPrenom());
+                    row.createCell(1).setCellValue(patient.getNom());
+                    row.createCell(2).setCellValue(patient.getDateNaissance().toString());
+                    row.createCell(3).setCellValue(patient.getTelephone());
+                    row.createCell(4).setCellValue(patient.getCIN());
+                    row.createCell(5).setCellValue(patient.getAdresse());
+                }
+
+                // Resize columns to fit content
+                for (int i = 0; i < tablePatients.getColumns().size(); i++) {
+                    sheet.autoSizeColumn(i);
+                }
+
+                // Write the output to a file
+                try (FileOutputStream fileOut = new FileOutputStream(file)) {
+                    workbook.write(fileOut);
+                }
+
+                System.out.println("Exported to Excel successfully!");
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Error exporting to Excel.");
+            }
+        }
+    }
     private void showInfoAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Succès");
@@ -327,11 +368,16 @@ public class PatientController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-    @FXML
-    private void onLogoutButtonClick() {
-        HelloApplication.loadPage("hello-view.fxml");
+    public void HomePage(ActionEvent actionEvent) {
+        HelloApplication.loadPage("SecretairePages/Home.fxml");
     }
-
-
+    public void PatientPage(ActionEvent actionEvent) {
+        HelloApplication.loadPage("SecretairePages/patients.fxml");
+    }
+    public void RendezVousPage(ActionEvent actionEvent) {
+        HelloApplication.loadPage("SecretairePages/rendezvous.fxml");
+    }
+    public void PaiementPage(ActionEvent actionEvent) {
+        HelloApplication.loadPage("SecretairePages/paiement.fxml");
+    }
 }

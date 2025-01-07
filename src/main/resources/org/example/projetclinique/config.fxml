@@ -6,9 +6,12 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -34,7 +37,7 @@
                     </children>
                 </VBox>
                 <!-- Sidebar Buttons -->
-                <Button fx:id="btnAccueil"  alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnAccueilClick" prefHeight="56.0" prefWidth="361.0" text="Accueil">
+                <Button fx:id="btnAccueil" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnAccueilClick" prefHeight="56.0" prefWidth="361.0" text="Accueil">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -49,7 +52,7 @@
                         <Insets left="65.0" />
                     </padding>
                 </Button>
-                <Button fx:id="btnPatients" alignment="BASELINE_LEFT" onAction="#onBtnPatientsClick" graphicTextGap="40.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="361.0" text="Patients">
+                <Button fx:id="btnPatients" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnPatientsClick" prefHeight="56.0" prefWidth="361.0" text="Patients">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -64,7 +67,7 @@
                         <Insets left="65.0" />
                     </padding>
                 </Button>
-                <Button fx:id="btnActesMedic" onAction="#onBtnActeMedicClick" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="361.0" text="Actes médicaux">
+                <Button fx:id="btnActesMedic" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnActeMedicClick" prefHeight="56.0" prefWidth="361.0" text="Actes médicaux">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -79,7 +82,7 @@
                         <Insets left="68.0" />
                     </padding>
                 </Button>
-                <Button fx:id="btnUser" onAction="#onBtnUserClick" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="361.0" text=" Utilisateurs">
+                <Button fx:id="btnUser" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnUserClick" prefHeight="56.0" prefWidth="361.0" text=" Utilisateurs">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -94,7 +97,7 @@
                         <Insets left="68.0" />
                     </padding>
                 </Button>
-                <Button fx:id="btnConfig" onAction="#onBtnConfigClick" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="361.0" text="Configuration">
+                <Button fx:id="btnConfig" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnConfigClick" prefHeight="56.0" prefWidth="361.0" text="Configuration">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -133,10 +136,134 @@
 
         <!-- Main Content -->
         <AnchorPane layoutX="299.3333333333333" layoutY="-2.0" prefHeight="680.0" prefWidth="981.0" style="-fx-background-color: #FFFFFF;" AnchorPane.leftAnchor="299.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-2.0">
-            <children>
-                <Label layoutX="66.0" layoutY="14.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Configuration" />
-
-            </children>
+         <children>
+            <Pane layoutX="41.0" layoutY="78.0" prefHeight="282.0" prefWidth="926.0" style="-fx-border-color: #D6EFF3; -fx-border-radius: 15;">
+               <children>
+                  <TableView fx:id="tableCatInt" layoutX="494.0" layoutY="13.0" prefHeight="236.0" prefWidth="415.0">
+                     <columns>
+                        <TableColumn fx:id="colCatInt" prefWidth="226.0" text="Catégorie d'intervention" />
+                        <TableColumn fx:id="colPrixCat" prefWidth="194.0" text="Prix " />
+                     </columns>
+                  </TableView>
+                  <Label layoutX="16.0" layoutY="9.0" text="Gestion des catégories d'intervention" textFill="#1a4eb5">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <HBox layoutX="48.0" layoutY="60.0" prefHeight="100.0" prefWidth="354.0">
+                     <children>
+                        <VBox alignment="TOP_CENTER" prefHeight="139.0" prefWidth="153.0">
+                           <children>
+                              <Label layoutX="58.0" layoutY="10.0" prefHeight="42.0" prefWidth="89.0" text="Catégorie" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER" layoutX="58.0" layoutY="52.0" prefHeight="42.0" prefWidth="128.0" text="Prix ">
+                                 <font>
+                                    <Font size="17.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="174.0" prefWidth="184.0">
+                           <children>
+                              <TextField fx:id="tfCatInt" layoutX="10.0" layoutY="10.0" prefHeight="42.0" />
+                              <TextField fx:id="tfPrixCat" layoutX="10.0" layoutY="52.0" prefHeight="42.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="11.0" layoutY="186.0" prefHeight="51.0" prefWidth="483.0" spacing="30.0">
+                     <children>
+                        <Button fx:id="btnAjouterCat" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#addCategory" prefHeight="42.0" prefWidth="115.0" style="-fx-background-color: #fff; -fx-border-color: #0A3AC4; -fx-border-radius: 20; -fx-text-fill: black;" text="Ajouter">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                        </Button>
+                        <Button fx:id="btnModifierCat" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#updateCategory" prefHeight="42.0" prefWidth="117.0" style="-fx-background-color: #fff; -fx-border-color: #0A3AC4; -fx-border-radius: 20; -fx-text-fill: black;" text="Modifier">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                        </Button>
+                        <Button fx:id="btnSupprimerCat" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#deleteCategory" prefHeight="42.0" prefWidth="127.0" style="-fx-background-color: #fff; -fx-border-color: #0A3AC4; -fx-border-radius: 20; -fx-text-fill: black;" text="Supprimer ">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </Pane>
+            <HBox alignment="CENTER_LEFT" prefHeight="57.0" prefWidth="981.0" style="-fx-background-color: #F5F4F3;">
+               <children>
+                  <ImageView fitHeight="51.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/ressources/Settings-icon.png" />
+                     </image>
+                  </ImageView>
+                  <Label alignment="CENTER" contentDisplay="CENTER" lineSpacing="10.0" prefHeight="47.0" prefWidth="387.0" text="Configurations" textAlignment="CENTER" textFill="#173c94" textOverrun="CENTER_ELLIPSIS">
+                     <font>
+                        <Font size="34.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets left="15.0" />
+               </padding>
+            </HBox>
+             <Pane layoutX="41.0" layoutY="372.0" prefHeight="288.0" prefWidth="926.0" style="-fx-border-color: #D6EFF3; -fx-border-radius: 15;">
+                 <children>
+                     <TableView fx:id="tableTypeRadio" layoutX="489.0" layoutY="11.0" prefHeight="245.0" prefWidth="423.0">
+                         <columns>
+                             <TableColumn fx:id="colId" prefWidth="70.0" text="ID" />
+                             <TableColumn fx:id="colTypeRadio" prefWidth="175.33331298828125" text="Type radio" />
+                             <TableColumn fx:id="colPrix" prefWidth="156.0" text="Prix" />
+                         </columns>
+                     </TableView>
+                     <Label layoutX="13.0" layoutY="15.0" text="Gestion des types de radios" textFill="#1a4eb5">
+                         <font>
+                             <Font size="15.0" />
+                         </font>
+                     </Label>
+                     <HBox alignment="CENTER" layoutX="32.0" layoutY="214.0" prefHeight="51.0" prefWidth="431.0" spacing="30.0">
+                         <children>
+                             <Button fx:id="btnAjouterRadio" mnemonicParsing="false" onAction="#addRadioType" prefHeight="42.0" prefWidth="117.0" style="-fx-background-color: #fff; -fx-border-color: #0A3AC4; -fx-border-radius: 20; -fx-text-fill: black;" text="Ajouter" />
+                             <Button fx:id="btnModifierRadio" mnemonicParsing="false" onAction="#updateRadioType" prefHeight="42.0" prefWidth="117.0" style="-fx-background-color: #fff; -fx-border-color: #0A3AC4; -fx-border-radius: 20; -fx-text-fill: black;" text="Modifier" />
+                             <Button fx:id="btnSupprimerRadio" mnemonicParsing="false" onAction="#deleteRadioType" prefHeight="42.0" prefWidth="127.0" style="-fx-background-color: #fff; -fx-border-color: #0A3AC4; -fx-border-radius: 20; -fx-text-fill: black;" text="Supprimer " />
+                         </children>
+                     </HBox>
+                     <VBox layoutX="96.0" layoutY="48.0" prefHeight="157.0" prefWidth="261.0" spacing="10.0">
+                         <children>
+                             <Label text="Type radio" textAlignment="CENTER">
+                                 <font>
+                                     <Font size="17.0" />
+                                 </font>
+                             </Label>
+                             <TextField fx:id="tfTypeRadio" prefHeight="42.0" />
+                             <Label text="Prix" textAlignment="CENTER">
+                                 <font>
+                                     <Font size="17.0" />
+                                 </font>
+                             </Label>
+                             <TextField fx:id="tfPrix" prefHeight="42.0" />
+                         </children>
+                     </VBox>
+                 </children>
+             </Pane>
+         </children>
         </AnchorPane>
     </children>
 </AnchorPane>

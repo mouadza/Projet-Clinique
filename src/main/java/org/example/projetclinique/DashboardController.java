@@ -4,10 +4,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -23,6 +21,119 @@ import javafx.stage.Stage;
 
 
 public class DashboardController {
+    @FXML
+    private Label lblCurrentDate;
+    @FXML
+    private TableView<Rendezvous> interventionsTable;
+    @FXML
+    private TableColumn<Rendezvous, Integer> idColumn;
+    @FXML
+    private TableColumn<Rendezvous, String> patientColumn;
+    @FXML
+    private TableColumn<Rendezvous, String> dateColumn;
+    @FXML
+    private TableColumn<Rendezvous, String> categoryColumn;
+    @FXML
+    private TableColumn<Rendezvous, String> medicalActColumn;
+
+    @FXML
+    private Label totalRendezvousLabel;
+    @FXML
+    private Label totalPatient;
+    @FXML
+    private Label totalActe;
+
+    private ObservableList<Rendezvous> rendezVousList = FXCollections.observableArrayList();
+    public void initialize() {
+        setupTable();
+        fetchRendezVous();
+        fetchCounters();
+        setCurrentDate();
+    }
+
+    private void setupTable() {
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        patientColumn.setCellValueFactory(new PropertyValueFactory<>("patient"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("datePrev"));
+        categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+        medicalActColumn.setCellValueFactory(new PropertyValueFactory<>("medicalAct"));
+    }
+
+    private void fetchRendezVous() {
+        // SQL query to fetch today's and "Planifié" rendezvous
+        String query = "SELECT R.ID, DATE(R.date_prevue) AS date_pre, CI.categorie AS category, R.numero_acte, R.etat, DATE(R.date_reelle) AS date_reele, CONCAT(P.prenom, ' ', P.nom) AS full_name "
+                + "FROM Rendezvous R "
+                + "JOIN Patient P ON R.patient_id = P.id "
+                + "JOIN categorie_intervention CI ON R.categorie_id = CI.id "
+                + "WHERE DATE(R.date_prevue) = CURDATE() AND R.etat = 'Planifié'";
+
+        try (Connection connection = DatabaseConnection.connect();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            ObservableList<Rendezvous> rendezvousList = FXCollections.observableArrayList();
+
+            while (resultSet.next()) {
+                Rendezvous rendezvous = new Rendezvous(
+                        resultSet.getInt("ID"),
+                        resultSet.getString("full_name"),
+                        resultSet.getString("date_pre"),
+                        resultSet.getString("category"),
+                        resultSet.getInt("numero_acte"),
+                        resultSet.getString("etat"),
+                        resultSet.getString("date_reele")
+                );
+                rendezvousList.add(rendezvous);
+            }
+
+            // Set the fetched list into the TableView
+            interventionsTable.setItems(rendezvousList);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erreur lors du chargement des rendez-vous planifiés d'aujourd'hui.");
+        }
+    }
+
+
+
+    private void fetchCounters() {
+        // Queries
+        String totalRendezvousQuery = "SELECT COUNT(*) AS total_rendezvous FROM RendezVous";
+        String totalPatientsQuery = "SELECT COUNT(*) AS total_patients FROM Patient";
+        String actemedicauxQuery = "SELECT COUNT(*) AS total_actes FROM ActeMedicaux";
+
+        try (Connection conn = DatabaseConnection.connect();
+             PreparedStatement totalRendezvousStmt = conn.prepareStatement(totalRendezvousQuery);
+             PreparedStatement totalPatientsStmt = conn.prepareStatement(totalPatientsQuery);
+             PreparedStatement actemedicauxStmt = conn.prepareStatement(actemedicauxQuery)) {
+
+            // Fetch total rendezvous
+            ResultSet totalRendezvousResult = totalRendezvousStmt.executeQuery();
+            if (totalRendezvousResult.next()) {
+                int totalRendezvous = totalRendezvousResult.getInt("total_rendezvous");
+                totalRendezvousLabel.setText(String.valueOf(totalRendezvous));
+            }
+
+            // Fetch total patients
+            ResultSet totalPatientsResult = totalPatientsStmt.executeQuery();
+            if (totalPatientsResult.next()) {
+                int totalPatients = totalPatientsResult.getInt("total_patients");
+                totalPatient.setText(String.valueOf(totalPatients));
+            }
+
+            // Fetch today's "Planifié" rendezvous
+            ResultSet actemedicauxResult = actemedicauxStmt.executeQuery();
+            if (actemedicauxResult.next()) {
+                int planifieRendezvousToday = actemedicauxResult.getInt("total_actes");
+                totalActe.setText(String.valueOf(planifieRendezvousToday));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erreur lors du chargement des données des rendez-vous.");
+        }
+    }
 
     public void onBtnAccueilClick(ActionEvent actionEvent) {
         HelloApplication.loadPage("dashboard.fxml");
@@ -33,12 +144,12 @@ public class DashboardController {
     }
 
     public void onBtnActeMedicClick(ActionEvent actionEvent) {
+        System.out.println("Actes Medicaux openned");
         HelloApplication.loadPage("actesmedicaux.fxml");
     }
 
     public void onBtnUserClick(ActionEvent actionEvent) {
         HelloApplication.loadPage("utilisateurs.fxml");
-        System.out.println("Utilisateurs");
     }
 
     public void onLogoutButtonClick(ActionEvent actionEvent) {
@@ -48,28 +159,7 @@ public class DashboardController {
     public void onBtnConfigClick(ActionEvent actionEvent) {
         HelloApplication.loadPage("config.fxml");
     }
-    @FXML
-    private Label lblPatientsActifs;
 
-    @FXML
-    private Label lblRendezVousAujourdHui;
-
-    @FXML
-    private TableView<RendezVous> tableRendezVous;
-    @FXML
-    private TableColumn<RendezVous, String> colNomPatient;
-    @FXML
-    private TableColumn<RendezVous, String> colHeure;
-    @FXML
-    private TableColumn<RendezVous, String> colService;
-    @FXML
-    private Label lblCurrentDate;
-    public void initialize() {
-        loadStatistics();
-        setupTableColumns();
-        loadRendezVousTable();
-        setCurrentDate();
-    }
     private void setCurrentDate() {
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
@@ -77,92 +167,5 @@ public class DashboardController {
 
         lblCurrentDate.setText("La Liste des Rendez-vous Aujourd'hui le " + formattedDate);
     }
-    private void setupTableColumns() {
-        colNomPatient.setCellValueFactory(new PropertyValueFactory<>("nomPatient"));
-        colHeure.setCellValueFactory(new PropertyValueFactory<>("heure"));
-        colService.setCellValueFactory(new PropertyValueFactory<>("service"));
-    }
-    private void loadRendezVousTable() {
-        ObservableList<RendezVous> rendezVousList = FXCollections.observableArrayList();
-        Connection connection = DatabaseConnection.connect();
-        if (connection == null) {
-            System.err.println("Failed to establish a database connection.");
-            return;
-        }
-        try (Statement statement = connection.createStatement()) {
-            String query = """
-            SELECT CONCAT(p.prenom, ' ', p.nom) AS nom_patient, 
-                   TIME(r.date_reele) AS heure_reele, 
-                   s.nom AS service
-            FROM RendezVous r
-            JOIN Patient p ON r.id_Patient = p.id_patient
-            JOIN Service s ON r.service_id = s.id_service
-            WHERE DATE(r.date_prevu) = CURDATE()
-        """;
-            ResultSet resultSet = statement.executeQuery(query);
 
-            while (resultSet.next()) {
-                String nomPatient = resultSet.getString("nom_patient");
-                String heure = resultSet.getString("heure_reele");
-                String service = resultSet.getString("service");
-
-                rendezVousList.add(new RendezVous(nomPatient, heure, service));
-            }
-
-            tableRendezVous.setItems(rendezVousList);
-
-        } catch (SQLException e) {
-            System.err.println("Error loading TableView: " + e.getMessage());
-            e.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                System.err.println("Failed to close the database connection.");
-                e.printStackTrace();
-            }
-        }
-    }
-
-
-
-    private void loadStatistics() {
-        Connection connection = DatabaseConnection.connect();
-
-        if (connection == null) {
-            System.err.println("Failed to establish a database connection.");
-            return;
-        }
-
-        try (Statement statement = connection.createStatement()) {
-            // Requête pour compter les patients actifs
-            String queryPatientsActifs = "SELECT COUNT(*) AS total FROM Patient WHERE actif = TRUE";
-            ResultSet rsPatients = statement.executeQuery(queryPatientsActifs);
-            if (rsPatients.next()) {
-                lblPatientsActifs.setText(String.valueOf(rsPatients.getInt("total")));
-            }
-
-            // Requête pour compter les rendez-vous du jour
-            String queryRendezVous = """
-                SELECT COUNT(*) AS total
-                FROM RendezVous
-                WHERE DATE(date_rendezvous) = CURDATE()
-            """;
-            ResultSet rsRendezVous = statement.executeQuery(queryRendezVous);
-            if (rsRendezVous.next()) {
-                lblRendezVousAujourdHui.setText(String.valueOf(rsRendezVous.getInt("total")));
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Error while fetching statistics: " + e.getMessage());
-            e.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                System.err.println("Failed to close the database connection.");
-                e.printStackTrace();
-            }
-        }
-    }
 }

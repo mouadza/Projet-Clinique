@@ -1,14 +1,178 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="$CONTROLLER_NAME$"
-            prefHeight="400.0" prefWidth="600.0" >
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1280.0" stylesheets="@../../../../style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projetclinique.HomeController">
+    <children>
+        <!-- Sidebar -->
+        <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="297.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <!-- Header Section -->
+                <VBox prefHeight="0.0" prefWidth="297.0" />
+                <AnchorPane prefHeight="79.0" prefWidth="297.0" />
+                <ImageView fitHeight="127.0" fitWidth="148.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../../images/ressources/1200px-Male_Doctor_Flat_Icon_Vector.svg.png" />
+                    </image>
+                </ImageView>
+                <VBox prefHeight="75.0" prefWidth="297.0">
+                    <children>
+                        <Label alignment="CENTER" prefHeight="25.0" prefWidth="297.0" text="Secretaire">
+                            <font>
+                                <Font size="20.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+                <!-- Sidebar Buttons -->
+                <Button fx:id="btnAccueil" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#HomePage" prefHeight="56.0" prefWidth="361.0" text="Accueil">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="38.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../images/ressources/icons8_Home_32px.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <padding>
+                        <Insets left="65.0" />
+                    </padding>
+                </Button>
+                <Button fx:id="btnPatients" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#PatientPage" prefHeight="56.0" prefWidth="361.0" text="Patients">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="38.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../images/ressources/Picture12.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <padding>
+                        <Insets left="65.0" />
+                    </padding>
+                </Button>
+                <Button fx:id="btnRendezVous" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#RendezVousPage" prefHeight="56.0" prefWidth="361.0" text="Rendez Vous">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="33.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../images/ressources/RendezVous.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <padding>
+                        <Insets left="68.0" />
+                    </padding>
+                </Button>
+                <Button fx:id="btnPaiement" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#PaiementPage" prefHeight="56.0" prefWidth="361.0" text="Paiement">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="33.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../images/ressources/paiement.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <padding>
+                        <Insets left="68.0" />
+                    </padding>
+                </Button>
+                <Button fx:id="btnClose" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onLogoutButtonClick" prefHeight="56.0" prefWidth="297.0" text="Se déconnecter">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../images/ressources/logout.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <padding>
+                        <Insets left="67.0" />
+                    </padding>
+                </Button>
+            </children>
+            <styleClass>
+                <String fx:value="sidebar" />
+                <String fx:value="sidebar" />
+            </styleClass>
+        </VBox>
 
+        <!-- Main Content -->
+        <AnchorPane layoutX="299.3333333333333" layoutY="-2.0" prefHeight="680.0" prefWidth="981.0" style="-fx-background-color: #FFFFFF;" AnchorPane.leftAnchor="299.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-2.0">
+            <children>
+
+                <!-- Statistics Section -->
+                <HBox layoutX="66.0" layoutY="60.0" spacing="20.0" />
+
+                <!-- Search Bar -->
+                <HBox alignment="CENTER_LEFT" layoutX="66.0" layoutY="180.0" spacing="10.0">
+                    <children>
+                        <TextField fx:id="searchTextField" prefWidth="400.0" promptText="Rechercher..." />
+                        <Button fx:id="searchButton" style="-fx-font-size: 16px;" text="🔍" />
+                    </children>
+                </HBox>
+
+                <!-- Table -->
+                <TableView fx:id="interventionsTable" layoutX="57.0" layoutY="230.0" prefHeight="400.0" prefWidth="903.0">
+                    <columns>
+                        <TableColumn fx:id="idColumn" prefWidth="114.00003814697266" text="Id" />
+                        <TableColumn fx:id="patientColumn" prefWidth="157.3332977294922" text="Patient " />
+                        <TableColumn fx:id="dateColumn" prefWidth="176.66665649414062" text="Date prévue" />
+                        <TableColumn fx:id="categoryColumn" prefWidth="208.66671752929688" text="Catégorie" />
+                        <TableColumn fx:id="medicalActColumn" prefWidth="206.0" text="Numéro d'acte" />
+                    </columns>
+                </TableView>
+                  <VBox alignment="CENTER" layoutX="680.0" layoutY="60.0" prefHeight="100.0" prefWidth="250.0" style="-fx-border-color: gray; -fx-border-radius: 5; -fx-padding: 10;">
+                      <children>
+                          <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Rendez-vous Ajourd'huit" />
+                          <Label fx:id="todayRendezvousLabel" style="-fx-font-size: 20px; -fx-text-fill: #F44336;" text="0" />
+                      </children>
+                  </VBox>
+            <Label layoutX="380.0" layoutY="186.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Liste des Rendez-vous d'Aujourd'hui" textFill="#528d04" />
+            <HBox alignment="CENTER" layoutY="-3.0" prefHeight="46.0" prefWidth="981.0" style="-fx-background-color: #ECEFF0;">
+               <children>
+                  <Label text="Tableau de Bord" textFill="#163365">
+                     <font>
+                        <Font name="System Bold" size="23.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+                  <VBox alignment="CENTER" layoutX="380.0" layoutY="60.0" prefHeight="100.0" prefWidth="267.0" style="-fx-border-color: gray; -fx-border-radius: 5; -fx-padding: 10;">
+                      <children>
+                          <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Total Rendez-vous" />
+                          <Label fx:id="totalRendezvousLabel" style="-fx-font-size: 20px; -fx-text-fill: #FFC107;" text="0" />
+                      </children>
+                  </VBox>
+                  <VBox alignment="CENTER" layoutX="91.0" layoutY="60.0" prefHeight="100.0" prefWidth="262.0" style="-fx-border-color: gray; -fx-border-radius: 5; -fx-padding: 10;">
+                      <children>
+                          <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Total Patients" />
+                          <Label fx:id="totalPatient" style="-fx-font-size: 20px; -fx-text-fill: #4CAF50;" text="0" />
+                      </children>
+                  </VBox>
+            </children>
+        </AnchorPane>
+    </children>
 </AnchorPane>

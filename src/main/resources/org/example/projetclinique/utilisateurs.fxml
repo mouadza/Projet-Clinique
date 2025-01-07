@@ -4,15 +4,17 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1280.0" stylesheets="@../../../style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projetclinique.ActesmedicauxController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1280.0" stylesheets="@../../../style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.projetclinique.UtilisateursController">
     <children>
         <!-- Sidebar -->
         <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="297.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -34,7 +36,7 @@
                     </children>
                 </VBox>
                 <!-- Sidebar Buttons -->
-                <Button fx:id="btnAccueil"  alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnAccueilClick" prefHeight="56.0" prefWidth="361.0" text="Accueil">
+                <Button fx:id="btnAccueil" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnAccueilClick" prefHeight="56.0" prefWidth="361.0" text="Accueil">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -49,7 +51,7 @@
                         <Insets left="65.0" />
                     </padding>
                 </Button>
-                <Button fx:id="btnPatients" alignment="BASELINE_LEFT" onAction="#onBtnPatientsClick" graphicTextGap="40.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="361.0" text="Patients">
+                <Button fx:id="btnPatients" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnPatientsClick" prefHeight="56.0" prefWidth="361.0" text="Patients">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -64,7 +66,7 @@
                         <Insets left="65.0" />
                     </padding>
                 </Button>
-                <Button fx:id="btnActesMedic" onAction="#onBtnActeMedicClick" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="361.0" text="Actes médicaux">
+                <Button fx:id="btnActesMedic" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnActeMedicClick" prefHeight="56.0" prefWidth="361.0" text="Actes médicaux">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -79,7 +81,7 @@
                         <Insets left="68.0" />
                     </padding>
                 </Button>
-                <Button fx:id="btnUser" onAction="#onBtnUserClick" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="361.0" text=" Utilisateurs">
+                <Button fx:id="btnUser" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnUserClick" prefHeight="56.0" prefWidth="361.0" text=" Utilisateurs">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -94,7 +96,7 @@
                         <Insets left="68.0" />
                     </padding>
                 </Button>
-                <Button fx:id="btnConfig" onAction="#onBtnConfigClick" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="361.0" text="Configuration">
+                <Button fx:id="btnConfig" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnConfigClick" prefHeight="56.0" prefWidth="361.0" text="Configuration">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -132,11 +134,54 @@
         </VBox>
 
         <!-- Main Content -->
-        <AnchorPane layoutX="299.3333333333333" layoutY="-2.0" prefHeight="680.0" prefWidth="981.0" style="-fx-background-color: #FFFFFF;" AnchorPane.leftAnchor="299.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-2.0">
+        <AnchorPane layoutX="297.0" prefHeight="680.0" prefWidth="981.0" style="-fx-background-color: #FFFFFF;" AnchorPane.leftAnchor="297.0" AnchorPane.rightAnchor="2.3333333333332575" AnchorPane.topAnchor="0.0">
             <children>
-                <Label layoutX="66.0" layoutY="14.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Actes Medicaux" />
 
+                <!-- Form for adding Secretaire -->
+                <VBox layoutX="66.0" layoutY="60.0" prefHeight="560.0" prefWidth="318.0" spacing="15.0">
+                    <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="322.0" style="-fx-font-size: 18px;" text="Ajouter" />
+
+                        <Label text="Prénom:" />
+                        <TextField fx:id="prenomField" promptText="Prénom" />
+
+                        <!-- Input fields for Secretaire details -->
+                        <Label text="Nom:" />
+                        <TextField fx:id="nomField" promptText="Nom" />
+
+                        <Label text="Téléphone:" />
+                        <TextField fx:id="teleField" promptText="Téléphone" />
+
+                        <Label text="CIN:" />
+                        <TextField fx:id="cinField" promptText="CIN" />
+
+                        <Label text="Username:" />
+                        <TextField fx:id="usernameField" promptText="Username" />
+
+                        <Label text="Mot de passe:" />
+                        <PasswordField fx:id="passwordField" promptText="Mot de passe" />
+
+                        <!-- Buttons for actions -->
+                        <VBox alignment="CENTER" layoutY="350.0" spacing="15.0" />
+                    </children>
+                </VBox>
+
+                <!-- Table to display all secretaires -->
+                <TableView fx:id="secretaireTable" layoutX="406.0" layoutY="64.0" prefHeight="500.0" prefWidth="550.0">
+                    <columns>
+                        <TableColumn fx:id="prenomColumn" prefWidth="114.00003051757812" text="Prénom" />
+                        <TableColumn fx:id="nomColumn" prefWidth="100.6666259765625" text="Nom" />
+                        <TableColumn fx:id="teleColumn" prefWidth="105.33331298828125" text="Téléphone" />
+                        <TableColumn fx:id="cinColumn" minWidth="2.0" prefWidth="98.6666259765625" text="CIN" />
+                        <TableColumn fx:id="usernameColumn" prefWidth="108.0" text="Username" />
+                    </columns>
+                </TableView>
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="-1.0" prefHeight="49.0" prefWidth="988.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-background-color: #F5F4F3;" text="Gestion des Secretaires" textOverrun="CENTER_WORD_ELLIPSIS" />
+                   <Button fx:id="deleteSecretaireButton" layoutX="580.0" layoutY="578.0" onAction="#deleteSecretaire" prefHeight="42.0" prefWidth="202.0" style="-fx-background-color: red; -fx-text-fill: white;" text="Supprimer" />
+                   <Button fx:id="btnAjouter" layoutX="134.0" layoutY="608.0" onAction="#addSecretaire" prefHeight="42.0" prefWidth="161.0" text="Ajouter" />
             </children>
         </AnchorPane>
+
+
     </children>
 </AnchorPane>

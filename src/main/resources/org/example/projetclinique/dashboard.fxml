@@ -18,9 +18,8 @@
       <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="297.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <!-- Header Section -->
-            <VBox prefHeight="0.0" prefWidth="297.0" />
-            <AnchorPane prefHeight="79.0" prefWidth="297.0" />
-            <ImageView fitHeight="127.0" fitWidth="148.0" pickOnBounds="true" preserveRatio="true">
+            <VBox prefHeight="57.0" prefWidth="297.0" />
+            <ImageView fitHeight="116.0" fitWidth="134.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../images/ressources/1200px-Male_Doctor_Flat_Icon_Vector.svg.png" />
                </image>
@@ -141,31 +140,36 @@
                <!-- HBox for horizontal layout of the sections -->
                <VBox alignment="CENTER" spacing="20.0" />
             </VBox>
-            <VBox alignment="CENTER" layoutX="501.0" layoutY="61.0" prefHeight="131.0" prefWidth="227.0" style="-fx-background-color: #F4F4F8; -fx-border-color: #D2D2D6; -fx-border-width: 1; -fx-border-radius: 10; -fx-background-radius: 10;">
+            <VBox alignment="CENTER" layoutX="385.0" layoutY="61.0" prefHeight="131.0" prefWidth="227.0" style="-fx-background-color: #F4F4F8; -fx-border-color: #D2D2D6; -fx-border-width: 1; -fx-border-radius: 10; -fx-background-radius: 10;">
                <children>
-                  <Label style="-fx-font-size: 18px;" text="Rendez-vous Aujourd'hui" />
-                  <Label fx:id="lblRendezVousAujourdHui" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #FF5722;" text="0" />
+                  <Label style="-fx-font-size: 18px;" text="Total des Actes" />
+                  <Label fx:id="totalActe" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: green;" text="0" />
                </children>
             </VBox>
             <!-- Active Patients Section -->
-            <VBox alignment="CENTER" layoutX="158.0" layoutY="58.0" prefHeight="137.0" prefWidth="218.0" style="-fx-background-color: #F4F4F8; -fx-border-color: #D2D2D6; -fx-border-width: 1; -fx-border-radius: 10; -fx-background-radius: 10;">
-               <Label style="-fx-font-size: 18px;" text="Patients Actifs" />
-               <Label fx:id="lblPatientsActifs" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #4CAF50;" text="0" />
+            <VBox alignment="CENTER" layoutX="97.0" layoutY="58.0" prefHeight="137.0" prefWidth="218.0" style="-fx-background-color: #F4F4F8; -fx-border-color: #D2D2D6; -fx-border-width: 1; -fx-border-radius: 10; -fx-background-radius: 10;">
+               <Label style="-fx-font-size: 18px;" text="Total Patient" />
+               <Label fx:id="totalPatient" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: yellow;" text="0" />
             </VBox>
             <!-- Title -->
             <Label layoutX="66.0" layoutY="14.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Tableau de Bord" />
-            <TableView fx:id="tableRendezVous" layoutX="95.0" layoutY="258.0" prefHeight="397.0" prefWidth="776.0" style="-fx-background-color: #f4f4f4; -fx-border-color: #c0c0c0; -fx-border-radius: 8; -fx-background-radius: 8;">
-               <columns>
-                  <TableColumn fx:id="colNomPatient" prefWidth="226.6666" style="-fx-alignment: CENTER-LEFT; -fx-font-weight: bold; -fx-font-size: 14; -fx-text-fill: #2c3e50;" text="Nom Patient" />
-                  <TableColumn fx:id="colHeure" prefWidth="215.3333" style="-fx-alignment: CENTER; -fx-font-size: 14; -fx-text-fill: #34495e;" text="Heure" />
-                  <TableColumn fx:id="colService" prefWidth="233.3333" style="-fx-alignment: CENTER-RIGHT; -fx-font-size: 14; -fx-text-fill: #16a085;" text="Service" />
-               </columns>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
-            </TableView>
             <Label layoutX="66.0" layoutY="195.0" prefHeight="47.0" prefWidth="280.0" />
-            <Label fx:id="lblCurrentDate" layoutX="66.0" layoutY="219.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="La Liste des Rendez-vous Aujourd'hui le" />
+            <Label fx:id="lblCurrentDate" layoutX="66.0" layoutY="219.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: gray;" text="La Liste des Rendez-vous Aujourd'hui le" />
+            <VBox alignment="CENTER" layoutX="687.0" layoutY="61.0" prefHeight="131.0" prefWidth="227.0" style="-fx-background-color: #F4F4F8; -fx-border-color: #D2D2D6; -fx-border-width: 1; -fx-border-radius: 10; -fx-background-radius: 10;">
+               <children>
+                  <Label style="-fx-font-size: 18px;" text="Total des Rendez-vous" />
+                  <Label fx:id="totalRendezvousLabel" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: blue;" text="0" />
+               </children>
+            </VBox>
+            <TableView fx:id="interventionsTable" layoutX="82.0" layoutY="258.0" prefHeight="400.0" prefWidth="858.0">
+               <columns>
+                  <TableColumn fx:id="idColumn" prefWidth="114.00003814697266" text="Id" />
+                  <TableColumn fx:id="patientColumn" prefWidth="157.3332977294922" text="Patient " />
+                  <TableColumn fx:id="dateColumn" prefWidth="176.66665649414062" text="Date prévue" />
+                  <TableColumn fx:id="categoryColumn" prefWidth="226.00006103515625" text="Catégorie" />
+                  <TableColumn fx:id="medicalActColumn" prefWidth="190.0" text="Numéro d'acte" />
+               </columns>
+            </TableView>
 
          </children>
       </AnchorPane>
