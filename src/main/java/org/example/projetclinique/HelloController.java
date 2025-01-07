@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class    HelloController {
+public class HelloController {
 
     @FXML
     private TextField usernameField;
@@ -21,6 +21,7 @@ public class    HelloController {
 
     @FXML
     private Label errorLabel;
+
     @FXML
     private void onLoginButtonClick() {
         String username = usernameField.getText();
@@ -35,31 +36,23 @@ public class    HelloController {
         // Step 2: Attempt to connect to the database
         try (Connection connection = DatabaseConnection.connect()) {
             if (connection != null) {
-                // Step 3: Check for `admin` credentials
-                String adminQuery = "SELECT * FROM admin WHERE username = ? AND password = ?";
-                PreparedStatement adminStatement = connection.prepareStatement(adminQuery);
-                adminStatement.setString(1, username);
-                adminStatement.setString(2, password);
+                // Query to check for user credentials and role
+                String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+                PreparedStatement statement = connection.prepareStatement(query);
+                statement.setString(1, username);
+                statement.setString(2, password);
 
-                ResultSet adminResultSet = adminStatement.executeQuery();
+                ResultSet resultSet = statement.executeQuery();
 
-                if (adminResultSet.next()) {
-                    HelloApplication.loadPage("dashboard.fxml");
-                    System.out.println("Admin login successful!");
-                    return;
-                }
-
-                // Step 4: Check for `secretaire` credentials
-                String secretaireQuery = "SELECT * FROM secretaire WHERE username = ? AND password = ?";
-                PreparedStatement secretaireStatement = connection.prepareStatement(secretaireQuery);
-                secretaireStatement.setString(1, username);
-                secretaireStatement.setString(2, password);
-
-                ResultSet secretaireResultSet = secretaireStatement.executeQuery();
-
-                if (secretaireResultSet.next()) {
-                    HelloApplication.loadPage("SecretairePages/Home.fxml");
-                    System.out.println("Secretaire login successful!");
+                if (resultSet.next()) {
+                    String userType = resultSet.getString("TypeUser"); // Assuming "type" column indicates the role
+                    if (userType.equals("Docteur")) {
+                        HelloApplication.loadPage("dashboard.fxml");
+                    }
+                    if (userType.equals("Secretaire")) {
+                        HelloApplication.loadPage("SecretairePages/Home.fxml");
+                    }
+                    System.out.println(userType + " login successful!");
                     return;
                 }
 
@@ -75,8 +68,4 @@ public class    HelloController {
             errorLabel.setText("Error occurred while connecting to the database.");
         }
     }
-
-
-
-
 }

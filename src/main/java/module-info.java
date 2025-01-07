@@ -13,6 +13,7 @@ module org.example.projetclinique {
     requires java.sql;
     requires mysql.connector.j;
     requires org.apache.poi.ooxml;
+    requires java.desktop;
 
     opens org.example.projetclinique to javafx.fxml;
     exports org.example.projetclinique;

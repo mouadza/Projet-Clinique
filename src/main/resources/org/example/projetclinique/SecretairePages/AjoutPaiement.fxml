@@ -156,7 +156,7 @@
                 </VBox>
 
                  <!-- Submit Button -->
-                 <Button fx:id="btnAjouter" layoutX="85.0" layoutY="272.0" prefHeight="46.0" prefWidth="138.0" text="Ajouter" />
+                 <Button fx:id="btnAjouter" onAction="#ajouterPaiement" layoutX="85.0" layoutY="272.0" prefHeight="46.0" prefWidth="138.0" text="Ajouter" />
             </children>
         </AnchorPane>
       <TableView fx:id="tableActes" layoutX="679.0" layoutY="148.0" prefHeight="476.0" prefWidth="563.0">
