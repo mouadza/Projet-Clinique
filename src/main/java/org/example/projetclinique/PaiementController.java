@@ -71,7 +71,7 @@ public class PaiementController {
     public void initialize() {
         columnId.setCellValueFactory(new PropertyValueFactory<>("id"));
         columnActeId.setCellValueFactory(new PropertyValueFactory<>("acteId"));
-        columnPatientId.setCellValueFactory(new PropertyValueFactory<>("patienId"));
+        columnPatientId.setCellValueFactory(new PropertyValueFactory<>("patient_name"));
         columnDatePaiement.setCellValueFactory(new PropertyValueFactory<>("datePaiement"));
         columnMontant.setCellValueFactory(new PropertyValueFactory<>("montant"));
         columnPrixComptabilise.setCellValueFactory(new PropertyValueFactory<>("prixComptabilise"));
@@ -83,20 +83,6 @@ public class PaiementController {
 
         // Bind the filtered list to the TableView
         paiementTable.setItems(filteredActeList);
-
-        // Add a listener to the search text field
-        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredActeList.setPredicate(acte -> {
-                // If the search text is empty, show all items
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-
-                // Compare the patient name with the search text
-                String lowerCaseFilter = newValue.toLowerCase();
-                return acte.getPatientId().toLowerCase().contains(lowerCaseFilter); // Update to match your getter for patient name
-            });
-        });
 
         loadPaiements();
         loadPaiementStatistics();
@@ -152,8 +138,30 @@ public class PaiementController {
             }
         }
     }
+
+    @FXML
+    private void onSearchKeyReleased() {
+        String searchText = searchTextField.getText().trim().toLowerCase();
+
+        if (searchText.isEmpty()) {
+            paiementTable.setItems(paiementList); // Reset table to show all paiements
+        } else {
+            ObservableList<Paiement> filteredList = FXCollections.observableArrayList();
+
+            for (Paiement paiement : paiementList) {
+                if (paiement.getPatient_name().toLowerCase().contains(searchText)) {
+                    filteredList.add(paiement);
+                }
+            }
+
+            paiementTable.setItems(filteredList);
+        }
+    }
     private void loadPaiements() {
-        String query = "SELECT * FROM Paiements";
+        String query = "SELECT p.id, p.acteID, CONCAT(pt.prenom, ' ', pt.nom) AS patient_name, " +
+                "p.datePaiement, p.montant, p.prix_comptabilise, p.reste, p.paiement_method, p.statut " +
+                "FROM Paiements p " +
+                "JOIN Patient pt ON p.patientId = pt.id";
 
         try (Connection connection = DatabaseConnection.connect();
              Statement statement = connection.createStatement();
@@ -164,7 +172,7 @@ public class PaiementController {
                 paiementList.add(new Paiement(
                         resultSet.getString("id"),
                         resultSet.getString("acteID"),
-                        resultSet.getString("patientId"),
+                        resultSet.getString("patient_name"), // Correct alias
                         resultSet.getString("datePaiement"),
                         resultSet.getString("montant"),
                         resultSet.getString("prix_comptabilise"),
@@ -206,7 +214,7 @@ public class PaiementController {
 
                     row.createCell(0).setCellValue(paiement.getId());
                     row.createCell(1).setCellValue(paiement.getActeId());
-                    row.createCell(2).setCellValue(paiement.getPatientId());
+                    row.createCell(2).setCellValue(paiement.getPatient_name());
                     row.createCell(3).setCellValue(paiement.getDatePaiement());
                     row.createCell(4).setCellValue(paiement.getMontant());
                     row.createCell(5).setCellValue(paiement.getPrixComptabilise());

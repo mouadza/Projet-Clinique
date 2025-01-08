@@ -30,6 +30,8 @@ public class AjouterActController {
     @FXML
     private TextField tfNom, tfPrenom, tfTelephone, tfCIN, tfAdresse;
     private ObservableList<Patient> patientList = FXCollections.observableArrayList();
+    @FXML
+    private TextField tfSearch;
 
     @FXML
     private DatePicker dpDateNaissance;
@@ -39,24 +41,24 @@ public class AjouterActController {
             patientList.clear();
             Connection conn = DatabaseConnection.connect();
 
-            // Include ID in the query
             String query = "SELECT ID, nom, prenom, date_naissance, telephone, CIN, adresse FROM Patient";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
                 patientList.add(new Patient(
-                        rs.getString("ID"), // Add ID to the Patient constructor
+                        rs.getInt("ID"), // Correct type for ID
                         rs.getString("nom"),
                         rs.getString("prenom"),
                         rs.getString("date_naissance"),
                         rs.getString("telephone"),
                         rs.getString("CIN"),
-                        rs.getString("adresse")
+                        rs.getString("adresse"),
+                        null
                 ));
             }
 
-            tablePatients.setItems(patientList);
+            tablePatients.setItems(patientList); // Populate the TableView
             rs.close();
             stmt.close();
             conn.close();
@@ -65,6 +67,7 @@ public class AjouterActController {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     public void initialize() {
@@ -92,6 +95,20 @@ public class AjouterActController {
         loadPatientData();
     }
 
+    @FXML
+    public void onSearchKeyReleased() {
+        String searchQuery = tfSearch.getText().toLowerCase();
+        ObservableList<Patient> filteredList = FXCollections.observableArrayList();
+
+        for (Patient patient : patientList) {
+            if (patient.getNom().toLowerCase().contains(searchQuery) ||
+                    patient.getPrenom().toLowerCase().contains(searchQuery)) {
+                filteredList.add(patient);
+            }
+        }
+
+        tablePatients.setItems(filteredList);
+    }
     @FXML
     private void onAjouterActeClick() {
         try {

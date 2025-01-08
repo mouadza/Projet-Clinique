@@ -2,6 +2,7 @@ package org.example.projetclinique;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -71,6 +72,9 @@ public class PatientController {
     private Patient selectedPatient;
     @FXML
     private Label lblTotalAdults;
+    @FXML
+    private TextField tfSearch;
+
 
     @FXML
     public void initialize() {
@@ -84,15 +88,25 @@ public class PatientController {
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 
 
-        // Table row selection listener
-        tablePatients.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                selectedPatient = newSelection;
-            }
-        });
 
+        // Load initial data
         loadPatientData();
         loadStatistics();
+    }
+
+    @FXML
+    public void onSearchKeyReleased() {
+        String searchQuery = tfSearch.getText().toLowerCase();
+        ObservableList<Patient> filteredList = FXCollections.observableArrayList();
+
+        for (Patient patient : patientList) {
+            if (patient.getNom().toLowerCase().contains(searchQuery) ||
+                    patient.getPrenom().toLowerCase().contains(searchQuery)) {
+                filteredList.add(patient);
+            }
+        }
+
+        tablePatients.setItems(filteredList);
     }
     private void loadStatistics() {
         Connection connection = DatabaseConnection.connect();
@@ -142,24 +156,24 @@ public class PatientController {
             patientList.clear();
             Connection conn = DatabaseConnection.connect();
 
-            String query = "SELECT nom, prenom, date_naissance, telephone, CIN, adresse, email FROM Patient";
+            String query = "SELECT ID, nom, prenom, date_naissance, telephone, CIN, adresse FROM Patient";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
                 patientList.add(new Patient(
+                        rs.getInt("ID"), // Correct type for ID
                         rs.getString("nom"),
                         rs.getString("prenom"),
                         rs.getString("date_naissance"),
                         rs.getString("telephone"),
                         rs.getString("CIN"),
                         rs.getString("adresse"),
-                        rs.getString("email") // Add this line to retrieve email
+                        null // Assuming email is optional
                 ));
             }
 
-
-            tablePatients.setItems(patientList);
+            tablePatients.setItems(patientList); // Populate the TableView
             rs.close();
             stmt.close();
             conn.close();
@@ -168,6 +182,7 @@ public class PatientController {
             e.printStackTrace();
         }
     }
+
 
     private void populateFormWithPatient(Patient patient) {
         tfNom.setText(patient.getNom());

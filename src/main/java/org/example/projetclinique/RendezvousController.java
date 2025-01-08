@@ -60,8 +60,6 @@ public class RendezvousController {
 
     @FXML
     private TextField searchTextField;
-    @FXML
-    private FilteredList<Rendezvous> filteredRendezvousList;
     // Assuming you have a method to connect to the database
     private Connection conn = DatabaseConnection.connect();
 
@@ -77,34 +75,31 @@ public class RendezvousController {
         realDateColumn.setCellValueFactory(new PropertyValueFactory<>("realDate"));
 
 
-        filteredRendezvousList = new FilteredList<>(rendezvousList, p -> true);
-
-// Bind the filtered list to the TableView
-        interventionsTable.setItems(filteredRendezvousList);
-
-// Add a listener to the search text field
-        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredRendezvousList.setPredicate(rendezvous -> {
-                // If the search text is empty, show all items
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-
-                // Compare the patient name with the search text
-                String lowerCaseFilter = newValue.toLowerCase();
-
-                // Ensure that the method used is the getter for the patient name
-                return rendezvous.getPatient().toLowerCase().contains(lowerCaseFilter);
-            });
-        });
-
         loadData();
         loadAppointmentCounts();
     }
 
+    @FXML
+    private void onSearchKeyReleased() {
+        String searchText = searchTextField.getText().trim().toLowerCase();
+
+        if (searchText.isEmpty()) {
+            interventionsTable.setItems(rendezvousList); // Reset table to show all paiements
+        } else {
+            ObservableList<Rendezvous> filteredList = FXCollections.observableArrayList();
+
+            for (Rendezvous paiement : rendezvousList) {
+                if (paiement.getPatient().toLowerCase().contains(searchText)) {
+                    filteredList.add(paiement);
+                }
+            }
+
+            interventionsTable.setItems(filteredList);
+        }
+    }
     // Method to load data into the table
     private void loadData() {
-        ObservableList<Rendezvous> rendezvousList = FXCollections.observableArrayList();
+        rendezvousList.clear();  // Clear the list to prevent old data from being added
         try {
             String query = "SELECT R.ID, DATE(R.date_prevue) AS date_pre, CI.categorie AS category, R.numero_acte, R.etat, DATE(R.date_reelle) AS date_reele, CONCAT(P.prenom,' ',P.nom) AS full_name "
                     + "FROM Rendezvous R "
@@ -124,17 +119,15 @@ public class RendezvousController {
                 String status = rs.getString("etat");
                 String realDate = rs.getString("date_reele");
                 Rendezvous rendezvous = new Rendezvous(id, patientName, datePrevue, category, medicalAct, status, realDate);
-                rendezvousList.add(rendezvous);
+                rendezvousList.add(rendezvous);  // Add to the existing list
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        Platform.runLater(() -> {
-            interventionsTable.setItems(rendezvousList);
-            interventionsTable.refresh(); // Ensure UI reflects data changes
-        });
+        interventionsTable.setItems(rendezvousList);  // Set the table with the data from the list
     }
+
     @FXML
     private void onReporterClick() {
         Rendezvous selected = interventionsTable.getSelectionModel().getSelectedItem();

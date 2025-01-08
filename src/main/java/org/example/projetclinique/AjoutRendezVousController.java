@@ -41,6 +41,8 @@ public class AjoutRendezVousController {
     private ComboBox<String> cbCategorie; // ComboBox for Categories
 
     private ObservableList<Patient> patientList = FXCollections.observableArrayList();
+    @FXML
+    private TextField tfSearch;
 
     @FXML
     private DatePicker dpDateNaissance;
@@ -79,7 +81,26 @@ public class AjoutRendezVousController {
         loadCategories();
     }
 
+    @FXML
+    private void onSearchKeyReleased() {
+        String searchText = tfSearch.getText().trim().toLowerCase();
 
+        if (searchText.isEmpty()) {
+            tablePatients.setItems(patientList); // Reset table to show all patients
+        } else {
+            ObservableList<Patient> filteredList = FXCollections.observableArrayList();
+
+            for (Patient patient : patientList) {
+                if (patient.getNom().toLowerCase().contains(searchText) ||
+                        patient.getPrenom().toLowerCase().contains(searchText) ||
+                        patient.getCIN().toLowerCase().contains(searchText)) {
+                    filteredList.add(patient);
+                }
+            }
+
+            tablePatients.setItems(filteredList);
+        }
+    }
 
     private void loadPatientData() {
         try {

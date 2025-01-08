@@ -184,7 +184,7 @@
                   <Font size="24.0" />
                </font>
             </Label>
-            <TextField fx:id="searchTextField" layoutX="49.0" layoutY="177.0" prefWidth="400.0" promptText="Rechercher..." text="Recherche Par Patient" />
+            <TextField fx:id="tfSearch" onKeyReleased="#onSearchKeyReleased" layoutX="49.0" layoutY="177.0" prefWidth="400.0" promptText="Recherche Par Patient" />
             </children>
         </AnchorPane>
     </children>

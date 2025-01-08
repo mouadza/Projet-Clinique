@@ -85,8 +85,8 @@ public class UtilisateursController {
         try (Connection connection = DatabaseConnection.connect();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
-            preparedStatement.setString(1, prenom);
-            preparedStatement.setString(2, nom);
+            preparedStatement.setString(1, nom);
+            preparedStatement.setString(2, prenom);
             preparedStatement.setString(3, tele);
             preparedStatement.setString(4, cin);
             preparedStatement.setString(5, username);

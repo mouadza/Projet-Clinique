@@ -39,6 +39,8 @@ public class AjoutPaiementController {
 
     @FXML
     private TableColumn<Acte, Integer> colPatientID;
+    @FXML
+    private TextField tfSearch;
 
 
     @FXML
@@ -54,6 +56,26 @@ public class AjoutPaiementController {
         // Load data
         loadDataFromDatabase();
     }
+
+    @FXML
+    private void onSearchKeyReleased() {
+        String searchQuery = tfSearch.getText().toLowerCase();
+        ObservableList<Acte> filteredList = FXCollections.observableArrayList();
+
+        for (Acte acte : tableActes.getItems()) {
+            if (acte.getPatientName().toLowerCase().contains(searchQuery)) {
+                filteredList.add(acte);
+            }
+        }
+
+        tableActes.setItems(filteredList);
+
+        // Reset the table if the search field is empty
+        if (searchQuery.isEmpty()) {
+            loadDataFromDatabase();
+        }
+    }
+
 
     private void loadDataFromDatabase() {
         ObservableList<Acte> actesList = FXCollections.observableArrayList();

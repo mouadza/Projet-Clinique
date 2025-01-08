@@ -135,7 +135,7 @@
                         <TableColumn fx:id="colTelephone" prefWidth="146.666748046875" text="Téléphone" />
                         <TableColumn fx:id="colCIN" prefWidth="111.333251953125" text="CIN" />
                         <TableColumn fx:id="colAdresse" prefWidth="118.666748046875" text="Adresse" />
-                        <TableColumn fx:id="colEmail" text="Email" prefWidth="150"/>
+                        <TableColumn fx:id="colEmail" prefWidth="150" text="Email" />
                     </columns>
                 </TableView>
                 <Label alignment="CENTER" layoutX="394.0" layoutY="123.0" prefHeight="30.0" prefWidth="238.0" style="-fx-background-size: 20; -fx-text-fill: blue; -fx-font-size: 25;" text="Listes des Patients">
@@ -178,7 +178,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                     </padding>
                 </Pane>
-            <TextField fx:id="searchTextField" layoutX="43.0" layoutY="185.0" prefWidth="400.0" promptText="Rechercher..." text="Recherche Par Patient" />
+            <TextField fx:id="tfSearch" onKeyReleased="#onSearchKeyReleased" layoutX="43.0" layoutY="185.0" prefWidth="400.0" promptText="Recherche Par Patient" />
             </children>
         </AnchorPane>
     </children>
