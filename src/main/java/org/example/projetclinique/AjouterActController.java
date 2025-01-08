@@ -46,7 +46,7 @@ public class AjouterActController {
 
             while (rs.next()) {
                 patientList.add(new Patient(
-                        rs.getInt("ID"), // Add ID to the Patient constructor
+                        rs.getString("ID"), // Add ID to the Patient constructor
                         rs.getString("nom"),
                         rs.getString("prenom"),
                         rs.getString("date_naissance"),

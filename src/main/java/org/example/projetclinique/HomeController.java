@@ -11,6 +11,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 import javafx.scene.control.Label;
 
 
@@ -27,6 +31,8 @@ public class HomeController {
     private TableColumn<Rendezvous, String> categoryColumn;
     @FXML
     private TableColumn<Rendezvous, String> medicalActColumn;
+    @FXML
+    private Label lblCurrentDate;
 
     @FXML
     private Label totalRendezvousLabel;
@@ -40,6 +46,7 @@ public class HomeController {
         setupTable();
         fetchRendezVous();
         fetchCounters();
+        setCurrentDate();
     }
 
     private void setupTable() {
@@ -139,5 +146,13 @@ public class HomeController {
     }
     public void PaiementPage(ActionEvent actionEvent) {
         HelloApplication.loadPage("SecretairePages/paiement.fxml");
+    }
+
+    private void setCurrentDate() {
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.FRENCH);
+        String formattedDate = currentDate.format(formatter);
+
+        lblCurrentDate.setText("La liste des rendez-vous aujourd'hui, le " + formattedDate);
     }
 }

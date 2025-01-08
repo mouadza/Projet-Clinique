@@ -57,9 +57,11 @@ public class AjoutPaiementController {
 
     private void loadDataFromDatabase() {
         ObservableList<Acte> actesList = FXCollections.observableArrayList();
-        String query = "SELECT a.ID, a.date_debut, a.prix_comptabilise, a.etat_de_l_acte, a.date_de_fin, CONCAT(p.prenom, ' ', p.nom) AS patient_name, p.id AS patient_id " +
+        String query = "SELECT a.ID, a.date_debut, a.prix_comptabilise, a.etat_de_l_acte, a.date_de_fin, " +
+                "CONCAT(p.prenom, ' ', p.nom) AS patient_name, p.id AS patient_id " +
                 "FROM ActeMedicaux a " +
-                "JOIN Patient p ON a.patient_concerne = p.id";
+                "JOIN Patient p ON a.patient_concerne = p.id " +
+                "WHERE a.prix_comptabilise > 0";
 
         try (Connection conn = DatabaseConnection.connect();
              Statement stmt = conn.createStatement();

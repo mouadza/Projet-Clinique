@@ -1,6 +1,7 @@
 package org.example.projetclinique;
 
-import javafx.application.Platform;
+import javax.mail.*;
+import javax.mail.internet.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -9,8 +10,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.util.Properties;
 import java.sql.*;
 import java.time.LocalDateTime;
+
 
 public class AjoutRendezVousController {
 
@@ -30,6 +33,9 @@ public class AjoutRendezVousController {
     @FXML
     private DatePicker dpDatePrevue;
     @FXML
+    private TableColumn<Patient, String> colEmail;
+
+    @FXML
     private ComboBox<String> cbActeMedical; // ComboBox for Acte Médical
     @FXML
     private ComboBox<String> cbCategorie; // ComboBox for Categories
@@ -47,6 +53,7 @@ public class AjoutRendezVousController {
         colTelephone.setCellValueFactory(new PropertyValueFactory<>("telephone"));
         colCIN.setCellValueFactory(new PropertyValueFactory<>("CIN"));
         colAdresse.setCellValueFactory(new PropertyValueFactory<>("adresse"));
+        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 
         // Set ComboBox to not interfere with row selection
         cbActeMedical.setFocusTraversable(false); // Prevent ComboBox from interrupting row selection
@@ -79,7 +86,7 @@ public class AjoutRendezVousController {
             patientList.clear();
             Connection conn = DatabaseConnection.connect();
 
-            String query = "SELECT ID, nom, prenom, date_naissance, telephone, CIN, adresse FROM Patient";
+            String query = "SELECT ID, nom, prenom, date_naissance, telephone, CIN, adresse, email FROM Patient";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
@@ -91,7 +98,8 @@ public class AjoutRendezVousController {
                         rs.getString("date_naissance"),
                         rs.getString("telephone"),
                         rs.getString("CIN"),
-                        rs.getString("adresse")
+                        rs.getString("adresse"),
+                        rs.getString("email")
                 ));
             }
 
@@ -199,6 +207,7 @@ public class AjoutRendezVousController {
 
             int patientId = selectedPatient.getID(); // Get the selected patient ID
             System.out.println("Selected Patient ID: " + patientId);
+
             // Validate inputs
             if (labelIDPatient.getText().equals(".....")) {
                 showErrorAlert("Sélectionnez un patient dans la table.");
@@ -209,6 +218,7 @@ public class AjoutRendezVousController {
                 showErrorAlert("Veuillez remplir tous les champs.");
                 return;
             }
+
             Connection conn = DatabaseConnection.connect();
             String acteMedical = cbActeMedical.getValue();
             String categorie = cbCategorie.getValue();
@@ -224,6 +234,20 @@ public class AjoutRendezVousController {
                 statement.setString(5, "Planifié"); // Default status
 
                 statement.executeUpdate();
+
+                // Send email after adding the rendez-vous
+                String emailSubject = "Rendez-vous Planifié";
+                String emailContent = "Bonjour " + selectedPatient.getPrenom() + " " + selectedPatient.getNom() + ",\n\n" +
+                        "Nous vous informons que votre rendez-vous a été planifié avec succès. Voici les détails :\n\n" +
+                        "Date : " + datePrevue.toLocalDate() + "\n" +
+                        "Acte médical : " + acteMedical + "\n" +
+                        "Catégorie : " + categorie + "\n\n" +
+                        "Nous vous prions d’arriver à l’heure prévue et de bien vouloir nous contacter en cas d’empêchement.\n\n" +
+                        "Cordialement,\n" +
+                        "L'équipe de la CliniDent";
+                sendEmail(selectedPatient.getEmail(), emailSubject, emailContent);
+
+
                 HelloApplication.loadPage("SecretairePages/rendezvous.fxml");
             }
         } catch (Exception e) {
@@ -231,6 +255,49 @@ public class AjoutRendezVousController {
             showErrorAlert("Erreur lors de l'ajout du rendez-vous : " + e.getMessage());
         }
     }
+
+    // Helper method to send email
+    @FXML
+    private void sendEmail(String toEmail, String subject, String messageText) {
+        // SMTP server information
+        String host = "smtp.gmail.com";  // Change to your SMTP host
+        String user = "moaad.za12@gmail.com";  // Sender's email
+        String password = "eljs etir olhy cgxo";  // Sender's email password
+
+        // Set up properties for the mail session
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", "587");  // Use port 587 for TLS
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+
+        // Authenticate and send email
+        Session session = Session.getInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, password);
+            }
+        });
+
+
+        try {
+            // Create a new email message
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(user));
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));  // Corrected access
+            message.setSubject(subject);
+            message.setText(messageText);
+
+            // Send the message
+            Transport.send(message);
+
+            System.out.println("Email sent successfully!");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            System.out.println("Failed to send email.");
+        }
+    }
+
 
     // Helper method to get category ID by name
     private int getCategorieIdByName(String categorie) throws SQLException {

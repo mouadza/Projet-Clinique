@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -162,10 +163,10 @@ public class DashboardController {
 
     private void setCurrentDate() {
         LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale.FRENCH);
         String formattedDate = currentDate.format(formatter);
 
-        lblCurrentDate.setText("La Liste des Rendez-vous Aujourd'hui le " + formattedDate);
+        lblCurrentDate.setText("La liste des rendez-vous aujourd'hui, le " + formattedDate);
     }
 
 }

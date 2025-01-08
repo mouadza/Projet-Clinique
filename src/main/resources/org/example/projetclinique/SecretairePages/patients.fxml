@@ -128,20 +128,15 @@
                     <!-- HBox for horizontal layout of the sections -->
                     <VBox alignment="CENTER" spacing="20.0" />
                 </VBox>
-                <VBox alignment="CENTER" layoutX="120.0" layoutY="62.0" prefHeight="105.0" prefWidth="227.0" style="-fx-background-color: #F4F4F8; -fx-border-color: #D2D2D6; -fx-border-width: 1; -fx-border-radius: 10; -fx-background-radius: 10;">
+                <VBox alignment="CENTER" layoutX="71.0" layoutY="62.0" prefHeight="92.0" prefWidth="317.0" style="-fx-background-color: #F4F4F8; -fx-border-color: #D2D2D6; -fx-border-width: 1; -fx-border-radius: 10; -fx-background-radius: 10;">
                     <children>
                         <Label style="-fx-font-size: 18px;" text="Total des Patients" />
                         <Label fx:id="lblTotal" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #4CAF50;" text="0" />
                     </children>
                 </VBox>
-                <!-- Active Patients Section -->
-                <VBox alignment="CENTER" layoutX="573.0" layoutY="62.0" prefHeight="105.0" prefWidth="218.0" style="-fx-background-color: #F4F4F8; -fx-border-color: #D2D2D6; -fx-border-width: 1; -fx-border-radius: 10; -fx-background-radius: 10;">
-                    <Label style="-fx-font-size: 18px;" text="Patients Actifs" />
-                    <Label fx:id="lblPatientsActifs" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #FF5722;" text="0" />
-                </VBox>
 
                 <!-- TableView for Patients -->
-                <TableView fx:id="tablePatients" layoutX="50.0" layoutY="181.0" prefHeight="425.0" prefWidth="700.0">
+                <TableView fx:id="tablePatients" layoutX="50.0" layoutY="215.0" prefHeight="391.0" prefWidth="700.0">
                     <columns>
                         <TableColumn fx:id="colPrenom" prefWidth="99.33335876464844" text="Prénom" />
                         <TableColumn fx:id="colNom" prefWidth="100.66662979125977" text="Nom" />
@@ -149,6 +144,7 @@
                         <TableColumn fx:id="colTelephone" prefWidth="156.66671752929688" text="Téléphone" />
                         <TableColumn fx:id="colCIN" prefWidth="100.0" text="CIN" />
                         <TableColumn fx:id="colAdresse" prefWidth="118.666748046875" text="Adresse" />
+                        <TableColumn fx:id="colEmail" text="Email" prefWidth="150"/>
                     </columns>
                 </TableView>
 
@@ -156,12 +152,13 @@
                 <VBox alignment="TOP_LEFT" layoutX="767.0" layoutY="216.0" prefWidth="200.0" spacing="10.0" style="-fx-padding: 10;">
                     <children>
                         <Label alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="21.0" prefWidth="175.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Ajouter Patient" />
-                        <TextField fx:id="tfPrenom" promptText="Prénom" />
+                        <TextField fx:id="tfPrenom" prefWidth="163.0" promptText="Prénom" />
                         <TextField fx:id="tfNom" promptText="Nom" />
                         <DatePicker fx:id="dpDateNaissance" promptText="Date Naissance" />
                         <TextField fx:id="tfTelephone" promptText="Téléphone" />
                         <TextField fx:id="tfCIN" promptText="CIN" />
                         <TextField fx:id="tfAdresse" promptText="Adresse" />
+                        <TextField fx:id="tfEmail" promptText="Email"/>
                         <AnchorPane prefHeight="56.0" prefWidth="180.0">
                             <children>
                                 <Button fx:id="btnAjouter" alignment="CENTER" contentDisplay="CENTER" graphicTextGap="40.0" layoutX="14.0" layoutY="7.0" mnemonicParsing="false" onAction="#onSavePatientClick" prefHeight="42.0" prefWidth="161.0" text="Ajouter" textAlignment="CENTER">
@@ -208,7 +205,7 @@
                 </Button>
                 <!-- Page Title -->
                 <Label alignment="CENTER" contentDisplay="CENTER" layoutX="-1.0" prefHeight="42.0" prefWidth="987.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-background-color: #F5F4F3;" text="Gestion des Patients" textOverrun="CENTER_WORD_ELLIPSIS" />
-            <Button layoutX="791.0" layoutY="167.0" onAction="#exportToExcel" prefHeight="40.0" prefWidth="152.0" style="-fx-background-color: white; -fx-border-color: green;" text="Export">
+            <Button layoutX="591.0" layoutY="167.0" onAction="#exportToExcel" prefHeight="40.0" prefWidth="152.0" style="-fx-background-color: white; -fx-border-color: green;" text="Export">
                <font>
                   <Font size="16.0" />
                </font>
@@ -223,6 +220,13 @@
                   <Insets left="20.0" />
                </padding>
             </Button>
+            <TextField fx:id="searchTextField" layoutX="71.0" layoutY="167.0" prefHeight="30.0" prefWidth="297.0" promptText="Recherche Par Patient" />
+            <VBox alignment="CENTER" layoutX="546.0" layoutY="62.0" prefHeight="91.0" prefWidth="317.0" style="-fx-background-color: #F4F4F8; -fx-border-color: #D2D2D6; -fx-border-width: 1; -fx-border-radius: 10; -fx-background-radius: 10;">
+               <children>
+                  <Label style="-fx-font-size: 18px;" text="Total des Patients Adults" />
+                  <Label fx:id="lblTotalAdults" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: blue;" text="0" />
+               </children>
+            </VBox>
 
             </children>
         </AnchorPane>

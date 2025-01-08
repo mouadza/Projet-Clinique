@@ -14,6 +14,8 @@ module org.example.projetclinique {
     requires mysql.connector.j;
     requires org.apache.poi.ooxml;
     requires java.desktop;
+    requires com.google.protobuf;
+    requires javax.mail.api;
 
     opens org.example.projetclinique to javafx.fxml;
     exports org.example.projetclinique;

@@ -52,7 +52,8 @@ public class PatientController {
     private TableColumn<Patient, String> colNom, colPrenom, colDateNaissance, colTelephone, colCIN, colAdresse;
 
     @FXML
-    private TableColumn<Patient, Boolean> colActif;
+    private TableColumn<Patient, String> colEmail;
+
 
     @FXML
     private TextField tfNom, tfPrenom, tfTelephone, tfCIN, tfAdresse;
@@ -61,13 +62,15 @@ public class PatientController {
     private DatePicker dpDateNaissance;
 
     @FXML
-    private CheckBox cbActif;
+    private TextField tfEmail;
 
     @FXML
     private Button btnAjouter; // Ensure this button is declared in the FXML
 
     private ObservableList<Patient> patientList = FXCollections.observableArrayList();
     private Patient selectedPatient;
+    @FXML
+    private Label lblTotalAdults;
 
     @FXML
     public void initialize() {
@@ -78,6 +81,8 @@ public class PatientController {
         colTelephone.setCellValueFactory(new PropertyValueFactory<>("telephone"));
         colCIN.setCellValueFactory(new PropertyValueFactory<>("CIN"));
         colAdresse.setCellValueFactory(new PropertyValueFactory<>("adresse"));
+        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+
 
         // Table row selection listener
         tablePatients.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -98,14 +103,25 @@ public class PatientController {
         }
 
         try (Statement statement = connection.createStatement()) {
-            // Requête pour compter les rendez-vous du jour
-            String queryRendezVous = """
+            // Query for total patients (existing logic)
+            String queryTotalPatients = """
                 SELECT COUNT(*) AS total
                 FROM Patient
             """;
-            ResultSet rsRendezVous = statement.executeQuery(queryRendezVous);
-            if (rsRendezVous.next()) {
-                lblTotal.setText(String.valueOf(rsRendezVous.getInt("total")));
+            ResultSet rsTotalPatients = statement.executeQuery(queryTotalPatients);
+            if (rsTotalPatients.next()) {
+                lblTotal.setText(String.valueOf(rsTotalPatients.getInt("total")));
+            }
+
+            // Query for adult patients (assuming age column exists)
+            String queryAdultPatients = """
+            SELECT COUNT(*) AS total
+            FROM Patient
+            WHERE TIMESTAMPDIFF(YEAR, date_naissance, CURDATE()) >= 18
+        """;
+            ResultSet rsAdultPatients = statement.executeQuery(queryAdultPatients);
+            if (rsAdultPatients.next()) {
+                lblTotalAdults.setText(String.valueOf(rsAdultPatients.getInt("total")));
             }
 
         } catch (SQLException e) {
@@ -126,7 +142,7 @@ public class PatientController {
             patientList.clear();
             Connection conn = DatabaseConnection.connect();
 
-            String query = "SELECT nom, prenom, date_naissance, telephone, CIN, adresse FROM Patient";
+            String query = "SELECT nom, prenom, date_naissance, telephone, CIN, adresse, email FROM Patient";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
@@ -137,9 +153,11 @@ public class PatientController {
                         rs.getString("date_naissance"),
                         rs.getString("telephone"),
                         rs.getString("CIN"),
-                        rs.getString("adresse")
+                        rs.getString("adresse"),
+                        rs.getString("email") // Add this line to retrieve email
                 ));
             }
+
 
             tablePatients.setItems(patientList);
             rs.close();
@@ -158,6 +176,7 @@ public class PatientController {
         tfTelephone.setText(patient.getTelephone());
         tfCIN.setText(patient.getCIN());
         tfAdresse.setText(patient.getAdresse());
+        tfEmail.setText(patient.getEmail());  // Add this line to set the email
     }
     @FXML
     private void onModifierButtonClick() {
@@ -180,6 +199,7 @@ public class PatientController {
             String telephone = tfTelephone.getText();
             String cin = tfCIN.getText();
             String adresse = tfAdresse.getText();
+            String email = tfEmail.getText();  // Get the email input value
 
             // Validate required fields
             if (nom.isEmpty() || prenom.isEmpty() || dateNaissance == null || cin.isEmpty()) {
@@ -190,10 +210,10 @@ public class PatientController {
             // Add or update the patient
             if (selectedPatient == null) {
                 // Add new patient
-                addPatientToDatabase(nom, prenom, dateNaissance, telephone, cin, adresse);
+                addPatientToDatabase(nom, prenom, dateNaissance, telephone, cin, adresse, email);  // Pass email to the method
             } else {
                 // Update existing patient
-                updatePatientInDatabase(selectedPatient.getCIN(), nom, prenom, dateNaissance, telephone, cin, adresse);
+                updatePatientInDatabase(selectedPatient.getCIN(), nom, prenom, dateNaissance, telephone, cin, adresse, email);  // Pass email to the method
                 selectedPatient = null; // Reset selection
                 btnAjouter.setText("Ajouter"); // Reset button text
             }
@@ -207,10 +227,10 @@ public class PatientController {
     }
 
     private void addPatientToDatabase(String nom, String prenom, String dateNaissance,
-                                      String telephone, String cin, String adresse) {
+                                      String telephone, String cin, String adresse, String email) {
         try {
             Connection conn = DatabaseConnection.connect();
-            String query = "INSERT INTO Patient (nom, prenom, date_naissance, telephone, CIN, adresse) VALUES (?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Patient (nom, prenom, date_naissance, telephone, CIN, adresse, email) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(query);
 
             stmt.setString(1, nom);
@@ -219,6 +239,7 @@ public class PatientController {
             stmt.setString(4, telephone);
             stmt.setString(5, cin);
             stmt.setString(6, adresse);
+            stmt.setString(7, email);  // Include email
 
             stmt.executeUpdate();
             loadStatistics();
@@ -230,11 +251,12 @@ public class PatientController {
         }
     }
 
+
     private void updatePatientInDatabase(String oldCin, String nom, String prenom, String dateNaissance,
-                                         String telephone, String cin, String adresse) {
+                                         String telephone, String cin, String adresse, String email) {
         try {
             Connection conn = DatabaseConnection.connect();
-            String query = "UPDATE Patient SET nom=?, prenom=?, date_naissance=?, telephone=?, CIN=?, adresse=? WHERE CIN=?";
+            String query = "UPDATE Patient SET nom=?, prenom=?, date_naissance=?, telephone=?, CIN=?, adresse=?, email=? WHERE CIN=?";
             PreparedStatement stmt = conn.prepareStatement(query);
 
             stmt.setString(1, nom);
@@ -243,7 +265,8 @@ public class PatientController {
             stmt.setString(4, telephone);
             stmt.setString(5, cin);
             stmt.setString(6, adresse);
-            stmt.setString(7, oldCin);
+            stmt.setString(7, email);  // Include email
+            stmt.setString(8, oldCin);
 
             stmt.executeUpdate();
             loadStatistics();
@@ -301,8 +324,10 @@ public class PatientController {
         tfTelephone.clear();
         tfCIN.clear();
         tfAdresse.clear();
+        tfEmail.clear();  // Clear email field
         dpDateNaissance.setValue(null);
     }
+
     @FXML
     private void exportToExcel() {
         FileChooser fileChooser = new FileChooser();
@@ -311,18 +336,18 @@ public class PatientController {
         fileChooser.setInitialFileName("Patients.xlsx");
         File file = fileChooser.showSaveDialog(tablePatients.getScene().getWindow());
 
-
         if (file != null) {
             try (Workbook workbook = new XSSFWorkbook()) {
                 Sheet sheet = workbook.createSheet("Patients");
                 Row headerRow = sheet.createRow(0);
 
-                // Add headers
+                // Add headers, including Email
                 for (int i = 0; i < tablePatients.getColumns().size(); i++) {
                     headerRow.createCell(i).setCellValue(tablePatients.getColumns().get(i).getText());
                 }
+                headerRow.createCell(tablePatients.getColumns().size()).setCellValue("Email");  // Add Email header
 
-                // Add data rows
+                // Add data rows, including Email
                 ObservableList<Patient> data = tablePatients.getItems();
                 for (int i = 0; i < data.size(); i++) {
                     Row row = sheet.createRow(i + 1);
@@ -334,10 +359,11 @@ public class PatientController {
                     row.createCell(3).setCellValue(patient.getTelephone());
                     row.createCell(4).setCellValue(patient.getCIN());
                     row.createCell(5).setCellValue(patient.getAdresse());
+                    row.createCell(6).setCellValue(patient.getEmail());  // Add Email data
                 }
 
                 // Resize columns to fit content
-                for (int i = 0; i < tablePatients.getColumns().size(); i++) {
+                for (int i = 0; i < tablePatients.getColumns().size() + 1; i++) {
                     sheet.autoSizeColumn(i);
                 }
 
@@ -353,6 +379,7 @@ public class PatientController {
             }
         }
     }
+
     private void showInfoAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Succès");

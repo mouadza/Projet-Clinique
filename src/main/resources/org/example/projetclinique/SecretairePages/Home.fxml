@@ -6,7 +6,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -126,14 +125,6 @@
                 <!-- Statistics Section -->
                 <HBox layoutX="66.0" layoutY="60.0" spacing="20.0" />
 
-                <!-- Search Bar -->
-                <HBox alignment="CENTER_LEFT" layoutX="66.0" layoutY="180.0" spacing="10.0">
-                    <children>
-                        <TextField fx:id="searchTextField" prefWidth="400.0" promptText="Rechercher..." />
-                        <Button fx:id="searchButton" style="-fx-font-size: 16px;" text="🔍" />
-                    </children>
-                </HBox>
-
                 <!-- Table -->
                 <TableView fx:id="interventionsTable" layoutX="57.0" layoutY="230.0" prefHeight="400.0" prefWidth="903.0">
                     <columns>
@@ -150,7 +141,7 @@
                           <Label fx:id="todayRendezvousLabel" style="-fx-font-size: 20px; -fx-text-fill: #F44336;" text="0" />
                       </children>
                   </VBox>
-            <Label layoutX="380.0" layoutY="186.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Liste des Rendez-vous d'Aujourd'hui" textFill="#528d04" />
+            <Label fx:id="lblCurrentDate" layoutX="117.0" layoutY="187.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Liste des Rendez-vous d'Aujourd'hui" textFill="#313eb7" />
             <HBox alignment="CENTER" layoutY="-3.0" prefHeight="46.0" prefWidth="981.0" style="-fx-background-color: #ECEFF0;">
                <children>
                   <Label text="Tableau de Bord" textFill="#163365">

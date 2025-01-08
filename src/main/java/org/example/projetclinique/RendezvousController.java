@@ -3,6 +3,7 @@ package org.example.projetclinique;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -56,6 +57,11 @@ public class RendezvousController {
     private Label totalInterventionsLabel;
     @FXML
     private Label  pastInterventionsLabel;
+
+    @FXML
+    private TextField searchTextField;
+    @FXML
+    private FilteredList<Rendezvous> filteredRendezvousList;
     // Assuming you have a method to connect to the database
     private Connection conn = DatabaseConnection.connect();
 
@@ -69,6 +75,28 @@ public class RendezvousController {
         medicalActColumn.setCellValueFactory(new PropertyValueFactory<>("medicalAct"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         realDateColumn.setCellValueFactory(new PropertyValueFactory<>("realDate"));
+
+
+        filteredRendezvousList = new FilteredList<>(rendezvousList, p -> true);
+
+// Bind the filtered list to the TableView
+        interventionsTable.setItems(filteredRendezvousList);
+
+// Add a listener to the search text field
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredRendezvousList.setPredicate(rendezvous -> {
+                // If the search text is empty, show all items
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                // Compare the patient name with the search text
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                // Ensure that the method used is the getter for the patient name
+                return rendezvous.getPatient().toLowerCase().contains(lowerCaseFilter);
+            });
+        });
 
         loadData();
         loadAppointmentCounts();
