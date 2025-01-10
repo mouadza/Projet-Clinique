@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="425.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.HelloController">
+    <children>
+        <!-- Background Image -->
+        <ImageView fitHeight="425.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="false">
+            <image>
+                <Image url="@../images/clinique.jpg" />
+            </image>
+        </ImageView>
+
+        <!-- Login Form -->
+        <VBox alignment="CENTER" layoutX="180.0" layoutY="73.0" prefHeight="325.0" prefWidth="226.0" spacing="15.0" stylesheets="@../style.css">
+            <children>
+                <ImageView fitHeight="41.0" fitWidth="71.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/profile-user.png" />
+                    </image>
+                </ImageView>
+                <Label prefHeight="35.0" prefWidth="83.0" styleClass="header-label" text="LOGIN" textAlignment="CENTER" />
+                <TextField fx:id="usernameField" prefHeight="31.0" prefWidth="220.0" promptText="Username">
+                    <font>
+                        <Font size="13.0" />
+                    </font>
+                </TextField>
+                <PasswordField fx:id="passwordField" prefHeight="33.0" prefWidth="220.0" promptText="Password" />
+                <Label fx:id="errorLabel" styleClass="error-label" text="" />
+                <Button onAction="#onLoginButtonClick" prefHeight="40.0" prefWidth="150.0" styleClass="login-button" text="Login" />
+            </children>
+         <styleClass>
+            <String fx:value=".login-form" />
+            <String fx:value="login-form" />
+         </styleClass>
+        </VBox>
+    </children>
+</AnchorPane>

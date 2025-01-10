@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1280.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.UtilisateursController">
+    <children>
+        <!-- Sidebar -->
+        <VBox alignment="TOP_CENTER" prefHeight="800.0" prefWidth="297.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <!-- Header Section -->
+                <VBox prefHeight="57.0" prefWidth="297.0" />
+                <ImageView fitHeight="116.0" fitWidth="134.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/ressources/1200px-Male_Doctor_Flat_Icon_Vector.svg.png" />
+                    </image>
+                </ImageView>
+                <VBox prefHeight="75.0" prefWidth="297.0">
+                    <children>
+                        <Label alignment="CENTER" prefHeight="25.0" prefWidth="297.0" text="Docteur Page">
+                            <font>
+                                <Font size="20.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+                <!-- Sidebar Buttons -->
+                <Button fx:id="btnAccueil" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnAccueilClick" prefHeight="56.0" prefWidth="361.0" text="Accueil">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="38.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../images/ressources/icons8_Home_32px.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <padding>
+                        <Insets left="65.0" />
+                    </padding>
+                </Button>
+                <Button fx:id="btnPatients" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnPatientsClick" prefHeight="56.0" prefWidth="361.0" text="Patients">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="38.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../images/ressources/Picture12.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <padding>
+                        <Insets left="65.0" />
+                    </padding>
+                </Button>
+                <Button fx:id="btnActesMedic" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnActeMedicClick" prefHeight="56.0" prefWidth="361.0" text="Actes médicaux">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="33.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../images/ressources/icons8_Xbox_Menu_32px.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <padding>
+                        <Insets left="68.0" />
+                    </padding>
+                </Button>
+                <Button fx:id="btnUser" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnUserClick" prefHeight="56.0" prefWidth="361.0" text=" Utilisateurs">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="33.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../images/ressources/icons8_Person_32px.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <padding>
+                        <Insets left="68.0" />
+                    </padding>
+                </Button>
+                <Button fx:id="btnConfig" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onBtnConfigClick" prefHeight="56.0" prefWidth="361.0" text="Configuration">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="33.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../images/ressources/config.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <padding>
+                        <Insets left="68.0" />
+                    </padding>
+                </Button>
+                <Button fx:id="btnClose" alignment="BASELINE_LEFT" graphicTextGap="40.0" mnemonicParsing="false" onAction="#onLogoutButtonClick" prefHeight="56.0" prefWidth="297.0" text="Se déconnecter">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../images/ressources/logout.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <padding>
+                        <Insets left="67.0" />
+                    </padding>
+                </Button>
+            </children>
+            <styleClass>
+                <String fx:value="sidebar" />
+                <String fx:value="sidebar" />
+            </styleClass>
+        </VBox>
+
+        <!-- Main Content -->
+        <AnchorPane layoutX="297.0" prefHeight="680.0" prefWidth="981.0" style="-fx-background-color: #FFFFFF;" AnchorPane.leftAnchor="297.0" AnchorPane.rightAnchor="2.3333333333332575" AnchorPane.topAnchor="0.0">
+            <children>
+
+                <!-- Form for adding Secretaire -->
+                <!-- Form for adding Secretaire -->
+                <VBox layoutX="43.0" layoutY="60.0" prefHeight="560.0" prefWidth="283.0" spacing="15.0">
+                    <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="322.0" style="-fx-font-size: 18px;" text="Ajouter" />
+
+                        <Label text="Prénom:" />
+                        <TextField fx:id="prenomField" promptText="Prénom" />
+                        <Label text="Nom:" />
+                        <TextField fx:id="nomField" promptText="Nom" />
+
+                        <Label text="Téléphone:" />
+                        <TextField fx:id="teleField" promptText="Téléphone" />
+
+                        <Label text="CIN:" />
+                        <TextField fx:id="cinField" promptText="CIN" />
+
+                        <Label text="Type d'utilisateur:" />
+                        <ComboBox fx:id="typeUserComboBox" prefHeight="43.0" prefWidth="318.0" promptText="Sélectionner le type">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList">
+                                    <String fx:value="docteur" />
+                                    <String fx:value="secretaire" />
+                                </FXCollections>
+                            </items>
+                        </ComboBox>
+
+                        <Label text="Username:" />
+                        <TextField fx:id="usernameField" prefHeight="51.0" prefWidth="318.0" promptText="Username" />
+
+                        <Label text="Mot de passe:" />
+                        <PasswordField fx:id="passwordField" prefHeight="52.0" prefWidth="318.0" promptText="Mot de passe" />
+
+                        <!-- Buttons for actions -->
+                        <VBox alignment="CENTER" layoutY="350.0" spacing="15.0" />
+                    </children>
+                </VBox>
+
+                <!-- Table to display all secretaires -->
+                <TableView fx:id="secretaireTable" layoutX="339.0" layoutY="60.0" prefHeight="500.0" prefWidth="647.0">
+                    <columns>
+                        <TableColumn fx:id="prenomColumn" prefWidth="94.6666259765625" text="Prénom" />
+                        <TableColumn fx:id="nomColumn" prefWidth="90.00003051757812" text="Nom" />
+                        <TableColumn fx:id="teleColumn" prefWidth="113.33331298828125" text="Téléphone" />
+                        <TableColumn fx:id="cinColumn" minWidth="2.0" prefWidth="74.66668701171875" text="CIN" />
+                        <TableColumn fx:id="usernameColumn" prefWidth="101.33331298828125" text="Username" />
+                        <!-- New TypeUser column -->
+                        <TableColumn fx:id="typeUserColumn" prefWidth="165.3333740234375" text="Type d'utilisateur" />
+                    </columns>
+                </TableView>
+                <Label alignment="CENTER" contentDisplay="CENTER" layoutX="-1.0" prefHeight="49.0" prefWidth="988.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-background-color: #F5F4F3;" text="Gestion des Utilisateurs" textOverrun="CENTER_WORD_ELLIPSIS" />
+                   <Button fx:id="deleteSecretaireButton" layoutX="580.0" layoutY="578.0" onAction="#deleteSecretaire" prefHeight="42.0" prefWidth="202.0" style="-fx-background-color: red; -fx-text-fill: white;" text="Supprimer" />
+                   <Button fx:id="btnAjouter" layoutX="121.0" layoutY="620.0" onAction="#addSecretaire" prefHeight="42.0" prefWidth="161.0" text="Ajouter" />
+            </children>
+        </AnchorPane>
+
+
+    </children>
+</AnchorPane>

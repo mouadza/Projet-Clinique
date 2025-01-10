@@ -2,7 +2,6 @@ module org.example.projetclinique {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
-
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
     requires net.synedra.validatorfx;
@@ -17,6 +16,10 @@ module org.example.projetclinique {
     requires com.google.protobuf;
     requires javax.mail.api;
 
-    opens org.example.projetclinique to javafx.fxml;
-    exports org.example.projetclinique;
+    opens DAO to javafx.fxml;
+    exports DAO;
+    exports metier;
+    opens metier to javafx.fxml;
+    exports Controllers;
+    opens Controllers to javafx.fxml;
 }
